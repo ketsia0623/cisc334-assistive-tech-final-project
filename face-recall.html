@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Face Recall — MindBloom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --g1: #173404;
+      --g2: #27500A;
+      --g3: #3B6D11;
+      --g4: #639922;
+      --g5: #97C459;
+      --g6: #C0DD97;
+      --g7: #EAF3DE;
+      --orange: #D85A30;
+      --orange-light: #FAECE7;
+      --text: #1a1a1a;
+      --text-muted: #4a5568;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--g7);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .skip-link {
+      position: absolute; top: -100px; left: 1rem;
+      background: var(--g1); color: white; padding: 8px 16px;
+      border-radius: 8px; font-weight: 700; font-size: 14px;
+      text-decoration: none; z-index: 1000; transition: top 0.2s;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    /* HEADER */
+    header {
+      background: var(--g1);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 22px;
+      color: var(--g6);
+      text-decoration: none;
+    }
+    .logo:focus-visible { outline: 2px solid var(--g5); outline-offset: 2px; border-radius: 4px; }
+    .back-btn {
+      background: var(--g3); color: white; text-decoration: none;
+      font-weight: 700; font-size: 14px; padding: 8px 16px;
+      border-radius: 20px; transition: background 0.2s;
+    }
+    .back-btn:hover { background: var(--g4); }
+    .back-btn:focus-visible { outline: 2px solid white; outline-offset: 2px; }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      max-width: 640px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* PAGE TITLE */
+    .page-header { text-align: center; margin-bottom: 1.5rem; }
+    .page-header h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 36px;
+      color: var(--g1);
+      margin-bottom: 6px;
+    }
+    .page-header p { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+
+    /* SCORE BAR */
+    .score-bar {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .score-pill {
+      background: var(--g1); color: var(--g6);
+      padding: 8px 20px; border-radius: 20px;
+      font-size: 15px; font-weight: 700;
+    }
+    .score-pill span { color: var(--g5); }
+
+    /* PROGRESS BAR */
+    .progress-wrap {
+      background: var(--g6);
+      border-radius: 10px;
+      height: 10px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+    .progress-fill {
+      background: var(--g3);
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    /* PHASE SCREENS */
+    .phase { display: none; }
+    .phase.active { display: block; }
+
+    /* STUDY PHASE */
+    .study-card {
+      background: white;
+      border: 2px solid var(--g5);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      animation: fadeIn 0.4s ease both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .avatar-circle {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      margin: 0 auto 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      border: 4px solid var(--g5);
+    }
+    .person-name {
+      font-family: 'Fredoka One', cursive;
+      font-size: 32px;
+      color: var(--g1);
+      margin-bottom: 6px;
+    }
+    .person-role {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .person-detail {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* STUDY HINT */
+    .study-tip {
+      background: var(--g7);
+      border-left: 4px solid var(--g4);
+      border-radius: 0 12px 12px 0;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .study-tip strong { color: var(--g2); }
+
+    /* BUTTONS */
+    .primary-btn {
+      display: block;
+      width: 100%;
+      background: var(--g3);
+      color: white;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      padding: 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .primary-btn:hover { background: var(--g2); }
+    .primary-btn:active { transform: scale(0.98); }
+    .primary-btn:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
+
+    /* RECALL PHASE */
+    .recall-card {
+      background: white;
+      border: 2px solid var(--g5);
+      border-radius: 24px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      animation: fadeIn 0.3s ease both;
+    }
+    .recall-card .avatar-row {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    .recall-card .small-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+      border: 3px solid var(--g5);
+      flex-shrink: 0;
+    }
+    .recall-card .role-text { font-size: 14px; color: var(--text-muted); }
+    .recall-card .question { font-family: 'Fredoka One', cursive; font-size: 20px; color: var(--g1); margin-bottom: 4px; }
+
+    .input-label {
+      display: block;
+      font-weight: 700;
+      color: var(--g2);
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+    .name-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--g5);
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      color: var(--text);
+      background: white;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 12px;
+    }
+    .name-input:focus { border-color: var(--g3); }
+    .name-input:disabled { background: #f5f5f5; cursor: not-allowed; }
+    .name-input.correct { border-color: var(--g3); background: var(--g7); }
+    .name-input.wrong   { border-color: var(--orange); background: var(--orange-light); }
+
+    /* FEEDBACK */
+    .feedback-box {
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .feedback-box.show { display: block; }
+    .feedback-box.good { background: var(--g7); color: var(--g2); border: 1.5px solid var(--g5); }
+    .feedback-box.bad  { background: var(--orange-light); color: var(--orange); border: 1.5px solid var(--orange); }
+
+    /* HINT TOGGLE */
+    .hint-toggle {
+      background: none;
+      border: 1.5px solid var(--g5);
+      color: var(--g3);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 5px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+    .hint-toggle:hover { background: var(--g7); }
+    .hint-toggle:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
+    .hint-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 10px;
+      display: none;
+    }
+    .hint-text.show { display: block; }
+
+    /* SUMMARY PANEL */
+    .summary-panel {
+      background: white;
+      border: 3px solid var(--g4);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      display: none;
+      animation: popIn 0.4s cubic-bezier(.175,.885,.32,1.275) both;
+    }
+    .summary-panel.show { display: block; }
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+    .summary-panel .trophy { font-size: 56px; margin-bottom: 1rem; }
+    .summary-panel h2 { font-family: 'Fredoka One', cursive; font-size: 28px; color: var(--g1); margin-bottom: 8px; }
+    .summary-panel p { color: var(--text-muted); font-size: 15px; margin-bottom: 1.5rem; }
+    .summary-stats {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .sum-stat {
+      background: var(--g7);
+      border: 1.5px solid var(--g5);
+      border-radius: 12px;
+      padding: 0.75rem 1.5rem;
+    }
+    .sum-stat .val { font-family: 'Fredoka One', cursive; font-size: 28px; color: var(--g1); }
+    .sum-stat .lbl { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* REVIEW LIST */
+    .review-list { text-align: left; margin-bottom: 1.5rem; }
+    .review-list h3 { font-family: 'Fredoka One', cursive; font-size: 18px; color: var(--g1); margin-bottom: 10px; }
+    .review-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--g6);
+      font-size: 14px;
+    }
+    .review-item .ri-avatar { font-size: 22px; }
+    .review-item .ri-name { font-weight: 700; color: var(--text); flex: 1; }
+    .review-item .ri-result { font-size: 16px; }
+
+    .sr-announce { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="sr-announce" aria-live="assertive" aria-atomic="true" id="sr-announce"></div>
+
+  <header role="banner">
+    <a href="index.html" class="logo" aria-label="MindBloom — go to home page">🌱 MindBloom</a>
+    <a href="index.html" class="back-btn" aria-label="Back to all games">← All Games</a>
+  </header>
+
+  <main id="main">
+    <div class="page-header">
+      <h1>Face Recall 👥</h1>
+      <p>Study each person's face and name, then recall it from memory. No timers!</p>
+    </div>
+
+    <!-- SCORE BAR -->
+    <div class="score-bar" role="status" aria-live="polite">
+      <div class="score-pill">Score: <span id="score-display">0</span></div>
+      <div class="score-pill">Round: <span id="round-display">1</span> / <span id="total-display">8</span></div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Game progress" id="progress-bar-wrap">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <!-- STUDY PHASE -->
+    <div class="phase active" id="phase-study" aria-label="Study phase">
+      <div class="study-card">
+        <div class="avatar-circle" id="study-avatar" aria-hidden="true"></div>
+        <div class="person-name"   id="study-name">Loading...</div>
+        <div class="person-role"   id="study-role"></div>
+        <div class="person-detail" id="study-detail"></div>
+      </div>
+      <div class="study-tip" role="note">
+        <strong>Memory tip:</strong> Try to connect this person's name to something unique about them. Look at their role and details!
+      </div>
+      <button class="primary-btn" onclick="startRecall()" id="study-btn">
+        I've memorized it — Test me! ✓
+      </button>
+    </div>
+
+    <!-- RECALL PHASE -->
+    <div class="phase" id="phase-recall" aria-label="Recall phase">
+      <div class="recall-card">
+        <div class="avatar-row">
+          <div class="small-avatar" id="recall-avatar" aria-hidden="true"></div>
+          <div>
+            <div class="question">Who is this person?</div>
+            <div class="role-text" id="recall-role"></div>
+          </div>
+        </div>
+        <label class="input-label" for="name-input">Type their full name:</label>
+        <input
+          type="text"
+          id="name-input"
+          class="name-input"
+          placeholder="First and last name..."
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          aria-describedby="name-hint"
+        />
+        <button class="hint-toggle" onclick="toggleHint()" id="hint-btn" aria-expanded="false" aria-controls="hint-text">
+          💡 Need a hint?
+        </button>
+        <p class="hint-text" id="hint-text" role="note"></p>
+        <div class="feedback-box" id="feedback-box" role="alert" aria-live="assertive"></div>
+        <button class="primary-btn" onclick="checkAnswer()" id="check-btn">Check Answer</button>
+        <button class="primary-btn" onclick="nextPerson()" id="next-btn" style="display:none; margin-top:10px; background:var(--g4);">
+          Next Person →
+        </button>
+      </div>
+    </div>
+
+    <!-- SUMMARY PANEL -->
+    <div class="summary-panel" id="summary-panel" role="status" aria-live="polite">
+      <div class="trophy" aria-hidden="true">🌟</div>
+      <h2>Round complete!</h2>
+      <p id="summary-msg">Here's how you did:</p>
+      <div class="summary-stats">
+        <div class="sum-stat"><div class="val" id="sum-correct">0</div><div class="lbl">Correct</div></div>
+        <div class="sum-stat"><div class="val" id="sum-wrong">0</div><div class="lbl">Missed</div></div>
+        <div class="sum-stat"><div class="val" id="sum-pct">0%</div><div class="lbl">Accuracy</div></div>
+      </div>
+      <div class="review-list" aria-label="Review your answers">
+        <h3>Review</h3>
+        <div id="review-items"></div>
+      </div>
+      <button class="primary-btn" onclick="restartGame()" style="max-width:320px; margin:0 auto;">
+        Play Again 🔄
+      </button>
+    </div>
+  </main>
+
+  <script>
+    const PEOPLE = [
+      { name: 'Maria Chen',     role: 'Community Gardener',   detail: 'Grows herbs and vegetables for the neighborhood',    avatar: '🌸', bg: '#EAF3DE', border: '#97C459' },
+      { name: 'James Okafor',   role: 'School Teacher',       detail: 'Teaches 4th grade science and loves astronomy',       avatar: '📖', bg: '#E1F5EE', border: '#1D9E75' },
+      { name: 'Sofia Reyes',    role: 'Local Doctor',         detail: 'Specializes in family medicine for 15 years',         avatar: '💊', bg: '#FAECE7', border: '#D85A30' },
+      { name: 'Tom Nguyen',     role: 'Library Volunteer',    detail: 'Reads to children every Saturday morning',            avatar: '📚', bg: '#E6F1FB', border: '#378ADD' },
+      { name: 'Aisha Patel',    role: 'Neighborhood Chef',    detail: 'Famous for her award-winning mango curry',            avatar: '🍲', bg: '#FAEEDA', border: '#EF9F27' },
+      { name: 'Carlos Mendez',  role: 'Park Ranger',          detail: 'Protects the local nature reserve on weekends',       avatar: '🌲', bg: '#EAF3DE', border: '#3B6D11' },
+      { name: 'Priya Sharma',   role: 'Music Teacher',        detail: 'Teaches piano and violin to kids aged 6–14',         avatar: '🎵', bg: '#FBEAF0', border: '#D4537E' },
+      { name: 'Ben Wallace',    role: 'Retired Engineer',     detail: 'Volunteers to fix bikes for kids in the community',   avatar: '🔧', bg: '#F1EFE8', border: '#888780' },
+    ];
+
+    let queue = [], current = 0, score = 0, results = [];
+    let hintVisible = false;
+
+    function shuffled(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+    function restartGame() {
+      queue = shuffled(PEOPLE);
+      current = 0; score = 0; results = [];
+
+      document.getElementById('score-display').textContent = '0';
+      document.getElementById('round-display').textContent = '1';
+      document.getElementById('total-display').textContent = queue.length;
+      document.getElementById('summary-panel').classList.remove('show');
+      updateProgress(0);
+
+      loadPerson();
+      showPhase('study');
+    }
+
+    function loadPerson() {
+      const p = queue[current];
+      document.getElementById('round-display').textContent = current + 1;
+
+      // Study card
+      const sa = document.getElementById('study-avatar');
+      sa.textContent = p.avatar;
+      sa.style.background = p.bg;
+      sa.style.borderColor = p.border;
+      document.getElementById('study-name').textContent   = p.name;
+      document.getElementById('study-role').textContent   = p.role;
+      document.getElementById('study-detail').textContent = p.detail;
+
+      // Recall card
+      const ra = document.getElementById('recall-avatar');
+      ra.textContent = p.avatar;
+      ra.style.background = p.bg;
+      ra.style.borderColor = p.border;
+      document.getElementById('recall-role').textContent = p.role + ' · ' + p.detail;
+
+      // Reset recall inputs
+      const input = document.getElementById('name-input');
+      input.value = ''; input.disabled = false;
+      input.className = 'name-input';
+      document.getElementById('check-btn').style.display = 'block';
+      document.getElementById('next-btn').style.display = 'none';
+      document.getElementById('feedback-box').className = 'feedback-box';
+      document.getElementById('feedback-box').textContent = '';
+      document.getElementById('hint-text').className = 'hint-text';
+      document.getElementById('hint-text').textContent = '';
+      document.getElementById('hint-btn').setAttribute('aria-expanded', 'false');
+      hintVisible = false;
+    }
+
+    function startRecall() {
+      showPhase('recall');
+      document.getElementById('name-input').focus();
+      announce('Now recall the name of the ' + queue[current].role + '. Type their name in the box.');
+    }
+
+    function toggleHint() {
+      hintVisible = !hintVisible;
+      const p = queue[current];
+      const hint = 'First name starts with: ' + p.name[0] + ' — last name starts with: ' + p.name.split(' ')[1][0];
+      const el = document.getElementById('hint-text');
+      el.textContent = hint;
+      el.className = 'hint-text' + (hintVisible ? ' show' : '');
+      document.getElementById('hint-btn').setAttribute('aria-expanded', hintVisible ? 'true' : 'false');
+    }
+
+    function normalize(str) { return str.trim().toLowerCase().replace(/[^a-z\s]/gi, ''); }
+
+    function checkAnswer() {
+      const p = queue[current];
+      const val = normalize(document.getElementById('name-input').value);
+      const correct = normalize(p.name);
+      const firstOnly = normalize(p.name.split(' ')[0]);
+      const lastOnly  = normalize(p.name.split(' ')[1]);
+
+      const isCorrect = val === correct || val === firstOnly + ' ' + lastOnly;
+      const isPartial = val === firstOnly || val === lastOnly;
+
+      const input = document.getElementById('name-input');
+      const fb = document.getElementById('feedback-box');
+      input.disabled = true;
+      document.getElementById('check-btn').style.display = 'none';
+      document.getElementById('next-btn').style.display = 'block';
+
+      if (isCorrect) {
+        score++;
+        document.getElementById('score-display').textContent = score;
+        input.className = 'name-input correct';
+        fb.textContent = '✅ Correct! Well done.';
+        fb.className = 'feedback-box show good';
+        results.push({ person: p, correct: true });
+        announce('Correct! ' + p.name);
+      } else if (isPartial) {
+        input.className = 'name-input wrong';
+        fb.textContent = '🟡 Close! The full name is: ' + p.name;
+        fb.className = 'feedback-box show bad';
+        results.push({ person: p, correct: false });
+        announce('Partial. Full name is ' + p.name);
+      } else {
+        input.className = 'name-input wrong';
+        fb.textContent = '❌ Not quite — the name was: ' + p.name;
+        fb.className = 'feedback-box show bad';
+        results.push({ person: p, correct: false });
+        announce('Incorrect. The answer was ' + p.name);
+      }
+
+      updateProgress(((current + 1) / queue.length) * 100);
+    }
+
+    function nextPerson() {
+      current++;
+      if (current >= queue.length) {
+        showSummary();
+      } else {
+        loadPerson();
+        showPhase('study');
+        announce('Next person. Study and memorize.');
+      }
+    }
+
+    function showSummary() {
+      showPhase(null);
+      const correct = results.filter(r => r.correct).length;
+      const wrong = results.length - correct;
+      const pct = Math.round((correct / results.length) * 100);
+
+      document.getElementById('sum-correct').textContent = correct;
+      document.getElementById('sum-wrong').textContent = wrong;
+      document.getElementById('sum-pct').textContent = pct + '%';
+
+      const msg = pct === 100 ? '🌟 Perfect memory!' : pct >= 75 ? '😊 Great job!' : pct >= 50 ? '👍 Good effort!' : '💪 Keep practicing!';
+      document.getElementById('summary-msg').textContent = msg;
+
+      const reviewEl = document.getElementById('review-items');
+      reviewEl.innerHTML = '';
+      results.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'review-item';
+        div.setAttribute('role', 'listitem');
+        div.innerHTML = `
+          <span class="ri-avatar" aria-hidden="true">${r.person.avatar}</span>
+          <span class="ri-name">${r.person.name}</span>
+          <span class="ri-result" aria-label="${r.correct ? 'correct' : 'missed'}">${r.correct ? '✅' : '❌'}</span>`;
+        reviewEl.appendChild(div);
+      });
+
+      document.getElementById('summary-panel').classList.add('show');
+      announce('Game over. You scored ' + correct + ' out of ' + results.length + '.');
+    }
+
+    function showPhase(id) {
+      document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+      if (id) document.getElementById('phase-' + id).classList.add('active');
+    }
+
+    function updateProgress(pct) {
+      const fill = document.getElementById('progress-fill');
+      fill.style.width = pct + '%';
+      document.getElementById('progress-bar-wrap').setAttribute('aria-valuenow', Math.round(pct));
+    }
+
+    function announce(msg) {
+      const el = document.getElementById('sr-announce');
+      el.textContent = '';
+      requestAnimationFrame(() => { el.textContent = msg; });
+    }
+
+    // Start the game
+    restartGame();
+  </script>
+
+</body>
+</html>

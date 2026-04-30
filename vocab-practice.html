@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vocab Practice — MindBloom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --g1: #173404;
+      --g2: #27500A;
+      --g3: #3B6D11;
+      --g4: #639922;
+      --g5: #97C459;
+      --g6: #C0DD97;
+      --g7: #EAF3DE;
+      --orange: #D85A30;
+      --orange-light: #FAECE7;
+      --text: #1a1a1a;
+      --text-muted: #4a5568;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--g7);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .skip-link {
+      position: absolute; top: -100px; left: 1rem;
+      background: var(--g1); color: white; padding: 8px 16px;
+      border-radius: 8px; font-weight: 700; font-size: 14px;
+      text-decoration: none; z-index: 1000; transition: top 0.2s;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    /* HEADER */
+    header {
+      background: var(--g1);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 22px;
+      color: var(--g6);
+      text-decoration: none;
+    }
+    .logo:focus-visible { outline: 2px solid var(--g5); outline-offset: 2px; border-radius: 4px; }
+    .back-btn {
+      background: var(--g3); color: white; text-decoration: none;
+      font-weight: 700; font-size: 14px; padding: 8px 16px;
+      border-radius: 20px; transition: background 0.2s;
+    }
+    .back-btn:hover { background: var(--g4); }
+    .back-btn:focus-visible { outline: 2px solid white; outline-offset: 2px; }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* PAGE TITLE */
+    .page-header { text-align: center; margin-bottom: 1.5rem; }
+    .page-header h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 36px;
+      color: var(--g1);
+      margin-bottom: 6px;
+    }
+    .page-header p { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+
+    /* CATEGORY SELECTOR */
+    .category-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .cat-btn {
+      background: white;
+      border: 2px solid var(--g5);
+      color: var(--g2);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 7px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .cat-btn:hover { background: var(--g6); }
+    .cat-btn.active { background: var(--g2); color: var(--g6); border-color: var(--g2); }
+    .cat-btn:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
+
+    /* SCORE BAR */
+    .score-bar {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .score-pill {
+      background: var(--g1); color: var(--g6);
+      padding: 8px 20px; border-radius: 20px;
+      font-size: 15px; font-weight: 700;
+    }
+    .score-pill span { color: var(--g5); }
+
+    /* STREAK */
+    .streak-row {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 14px;
+      color: var(--text-muted);
+      min-height: 22px;
+    }
+    .streak-row .streak-val { color: var(--orange); font-weight: 800; font-size: 16px; }
+
+    /* PROGRESS */
+    .progress-wrap {
+      background: var(--g6);
+      border-radius: 10px;
+      height: 10px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+    .progress-fill {
+      background: var(--g3);
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.4s ease;
+    }
+
+    /* WORD CARD */
+    .word-card {
+      background: white;
+      border: 2px solid var(--g5);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      animation: fadeIn 0.35s ease both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .word-category {
+      display: inline-block;
+      background: var(--g7);
+      color: var(--g2);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+    }
+    .word-display {
+      font-family: 'Fredoka One', cursive;
+      font-size: 48px;
+      color: var(--g1);
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+    .word-pos {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+    .word-pronunciation {
+      font-size: 13px;
+      color: var(--g3);
+      font-family: 'Courier New', monospace;
+    }
+
+    /* CHOICES */
+    .choices-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 480px) { .choices-grid { grid-template-columns: 1fr; } }
+
+    .choice-btn {
+      background: white;
+      border: 2px solid var(--g6);
+      border-radius: 14px;
+      padding: 14px 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      line-height: 1.4;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .choice-btn:hover:not(:disabled) { border-color: var(--g4); background: var(--g7); }
+    .choice-btn:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
+    .choice-btn:disabled { cursor: not-allowed; }
+    .choice-btn.correct {
+      background: var(--g6);
+      border-color: var(--g3);
+      color: var(--g1);
+    }
+    .choice-btn.correct::after {
+      content: '✓';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: 800;
+      color: var(--g2);
+    }
+    .choice-btn.wrong {
+      background: var(--orange-light);
+      border-color: var(--orange);
+      color: var(--g1);
+    }
+    .choice-btn.wrong::after {
+      content: '✗';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: 800;
+      color: var(--orange);
+    }
+
+    /* FEEDBACK */
+    .feedback-area {
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .feedback-area.show { display: block; }
+    .feedback-area.good { background: var(--g7); border: 1.5px solid var(--g5); color: var(--g2); }
+    .feedback-area.bad  { background: var(--orange-light); border: 1.5px solid var(--orange); color: var(--g1); }
+    .feedback-area .example {
+      margin-top: 8px;
+      font-style: italic;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* NEXT BUTTON */
+    .next-btn {
+      display: none;
+      width: 100%;
+      background: var(--g3);
+      color: white;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      padding: 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .next-btn.show { display: block; }
+    .next-btn:hover { background: var(--g2); }
+    .next-btn:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
+
+    /* SUMMARY PANEL */
+    .summary-panel {
+      background: white;
+      border: 3px solid var(--g4);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      display: none;
+      animation: popIn 0.4s cubic-bezier(.175,.885,.32,1.275) both;
+    }
+    .summary-panel.show { display: block; }
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .summary-panel .trophy { font-size: 56px; margin-bottom: 1rem; }
+    .summary-panel h2 { font-family: 'Fredoka One', cursive; font-size: 28px; color: var(--g1); margin-bottom: 8px; }
+    .summary-panel .sub { color: var(--text-muted); font-size: 15px; margin-bottom: 1.5rem; }
+    .summary-stats {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .sum-stat {
+      background: var(--g7);
+      border: 1.5px solid var(--g5);
+      border-radius: 12px;
+      padding: 0.75rem 1.5rem;
+    }
+    .sum-stat .val { font-family: 'Fredoka One', cursive; font-size: 28px; color: var(--g1); }
+    .sum-stat .lbl { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* MISSED WORDS */
+    .missed-section { text-align: left; margin-bottom: 1.5rem; }
+    .missed-section h3 { font-family: 'Fredoka One', cursive; font-size: 18px; color: var(--g1); margin-bottom: 10px; }
+    .missed-item {
+      background: var(--orange-light);
+      border: 1px solid var(--orange);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .missed-item strong { color: var(--g1); }
+    .missed-item .answer { color: var(--text-muted); }
+
+    .restart-btn {
+      display: block;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+      background: var(--g3);
+      color: white;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      padding: 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .restart-btn:hover { background: var(--g2); }
+    .restart-btn:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
+
+    .sr-announce { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="sr-announce" aria-live="assertive" aria-atomic="true" id="sr-announce"></div>
+
+  <header role="banner">
+    <a href="index.html" class="logo" aria-label="MindBloom — go to home page">🌱 MindBloom</a>
+    <a href="index.html" class="back-btn" aria-label="Back to all games">← All Games</a>
+  </header>
+
+  <main id="main">
+    <div class="page-header">
+      <h1>Vocab Practice 📚</h1>
+      <p>Choose the correct definition for each word. Learn at your own pace!</p>
+    </div>
+
+    <!-- CATEGORY -->
+    <div class="category-bar" role="group" aria-label="Choose word category">
+      <button class="cat-btn active" id="cat-all"     onclick="setCategory('all')"     aria-pressed="true">All Words</button>
+      <button class="cat-btn"        id="cat-nature"  onclick="setCategory('nature')"  aria-pressed="false">Nature</button>
+      <button class="cat-btn"        id="cat-people"  onclick="setCategory('people')"  aria-pressed="false">People</button>
+      <button class="cat-btn"        id="cat-actions" onclick="setCategory('actions')" aria-pressed="false">Actions</button>
+      <button class="cat-btn"        id="cat-feelings" onclick="setCategory('feelings')" aria-pressed="false">Feelings</button>
+    </div>
+
+    <!-- SCORE -->
+    <div class="score-bar" role="status" aria-live="polite" aria-label="Game stats">
+      <div class="score-pill">Score: <span id="score-val">0</span></div>
+      <div class="score-pill">Question: <span id="q-num">1</span> / <span id="q-total">10</span></div>
+    </div>
+    <div class="streak-row" aria-live="polite" id="streak-row"></div>
+
+    <!-- PROGRESS -->
+    <div class="progress-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progress through questions" id="prog-wrap">
+      <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+
+    <!-- WORD CARD -->
+    <div id="game-area">
+      <div class="word-card" id="word-card">
+        <span class="word-category" id="word-cat"></span>
+        <div class="word-display" id="word-display" aria-label="Word to define"></div>
+        <div class="word-pos" id="word-pos"></div>
+        <div class="word-pronunciation" id="word-pron"></div>
+      </div>
+
+      <div class="choices-grid" id="choices-grid" role="group" aria-label="Answer choices"></div>
+
+      <div class="feedback-area" id="feedback-area" role="alert" aria-live="assertive">
+        <span id="feedback-text"></span>
+        <p class="example" id="feedback-example"></p>
+      </div>
+
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next Word →</button>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary-panel" id="summary-panel" role="status" aria-live="polite">
+      <div class="trophy" aria-hidden="true">🏆</div>
+      <h2 id="sum-title">Round complete!</h2>
+      <p class="sub" id="sum-sub"></p>
+      <div class="summary-stats">
+        <div class="sum-stat"><div class="val" id="sum-score">0</div><div class="lbl">Correct</div></div>
+        <div class="sum-stat"><div class="val" id="sum-wrong">0</div><div class="lbl">Missed</div></div>
+        <div class="sum-stat"><div class="val" id="sum-pct">0%</div><div class="lbl">Accuracy</div></div>
+        <div class="sum-stat"><div class="val" id="sum-streak">0</div><div class="lbl">Best streak</div></div>
+      </div>
+      <div class="missed-section" id="missed-section" aria-label="Words to review"></div>
+      <button class="restart-btn" onclick="startGame()">Play Again 🔄</button>
+    </div>
+  </main>
+
+  <script>
+    const ALL_WORDS = [
+      // Nature
+      { word: 'Verdant',    pos: 'adjective', pron: '/ˈvɜːr.dənt/',  cat: 'nature',   def: 'Lush green with plants and vegetation', example: 'The verdant hillside was covered in wildflowers.',
+        wrong: ['Dry and barren', 'Rocky and steep', 'Cold and icy'] },
+      { word: 'Riparian',   pos: 'adjective', pron: '/rɪˈpɛər.i.ən/', cat: 'nature',   def: 'Relating to land beside a river or stream', example: 'Riparian zones are home to diverse wildlife.',
+        wrong: ['Found deep underground', 'Relating to ocean life', 'Existing in desert regions'] },
+      { word: 'Ephemeral',  pos: 'adjective', pron: '/ɪˈfɛm.ər.əl/',  cat: 'nature',   def: 'Lasting for a very short time', example: 'The ephemeral cherry blossoms only last a week.',
+        wrong: ['Lasting forever', 'Growing underground', 'Very loud and harsh'] },
+      { word: 'Solstice',   pos: 'noun',      pron: '/ˈsɒl.stɪs/',    cat: 'nature',   def: 'The time when the sun is at its highest or lowest point', example: 'The summer solstice is the longest day of the year.',
+        wrong: ['A type of storm', 'The path of a river', 'A rare mineral'] },
+
+      // People
+      { word: 'Altruistic', pos: 'adjective', pron: '/ˌæl.truˈɪs.tɪk/', cat: 'people',  def: 'Selflessly caring about others\' wellbeing', example: 'Her altruistic nature led her to volunteer daily.',
+        wrong: ['Focused only on oneself', 'Very competitive', 'Easily angered'] },
+      { word: 'Eloquent',   pos: 'adjective', pron: '/ˈɛl.ə.kwənt/',    cat: 'people',  def: 'Fluent and persuasive in speaking or writing', example: 'The eloquent speaker moved the crowd to tears.',
+        wrong: ['Quiet and reserved', 'Rude and blunt', 'Confused and unclear'] },
+      { word: 'Tenacious',  pos: 'adjective', pron: '/tɪˈneɪ.ʃəs/',     cat: 'people',  def: 'Holding firmly to a goal despite difficulty', example: 'A tenacious student who practiced every single day.',
+        wrong: ['Easily giving up', 'Loud and boisterous', 'Quick to change plans'] },
+      { word: 'Empathetic', pos: 'adjective', pron: '/ˌɛm.pəˈθɛt.ɪk/',  cat: 'people',  def: 'Able to understand and share others\' feelings', example: 'An empathetic teacher who listened to every student.',
+        wrong: ['Unaware of others', 'Very competitive', 'Cold and calculating'] },
+
+      // Actions
+      { word: 'Ponder',     pos: 'verb',      pron: '/ˈpɒn.dər/',    cat: 'actions',  def: 'To think deeply and carefully about something', example: 'She sat quietly to ponder her next move.',
+        wrong: ['To rush without thinking', 'To shout loudly', 'To move very fast'] },
+      { word: 'Meander',    pos: 'verb',      pron: '/miˈæn.dər/',   cat: 'actions',  def: 'To wander slowly without a fixed direction', example: 'We meandered through the park on a lazy afternoon.',
+        wrong: ['To run at full speed', 'To climb steeply upward', 'To dig underground'] },
+      { word: 'Cultivate',  pos: 'verb',      pron: '/ˈkʌl.tɪ.veɪt/', cat: 'actions', def: 'To develop or improve through care and effort', example: 'He worked hard to cultivate meaningful friendships.',
+        wrong: ['To destroy or tear down', 'To ignore completely', 'To race ahead quickly'] },
+      { word: 'Flourish',   pos: 'verb',      pron: '/ˈflʌr.ɪʃ/',    cat: 'actions',  def: 'To grow or develop in a healthy and vigorous way', example: 'The community garden began to flourish in spring.',
+        wrong: ['To wither and fade', 'To move backwards', 'To stay completely still'] },
+
+      // Feelings
+      { word: 'Serene',     pos: 'adjective', pron: '/sɪˈriːn/',     cat: 'feelings', def: 'Calm, peaceful, and untroubled', example: 'She felt serene watching the sunset over the lake.',
+        wrong: ['Angry and agitated', 'Busy and overwhelmed', 'Loud and restless'] },
+      { word: 'Elated',     pos: 'adjective', pron: '/ɪˈleɪ.tɪd/',   cat: 'feelings', def: 'Extremely happy and excited', example: 'He was elated when he heard the good news.',
+        wrong: ['Deeply sad and gloomy', 'Bored and indifferent', 'Tired and sluggish'] },
+      { word: 'Melancholy', pos: 'noun',      pron: '/ˈmɛl.ən.kɒl.i/', cat: 'feelings',def: 'A deep, thoughtful sadness or gloom', example: 'A sense of melancholy settled over the empty park.',
+        wrong: ['Great joy and energy', 'Intense anger', 'Extreme surprise'] },
+      { word: 'Nostalgic',  pos: 'adjective', pron: '/nɒˈstæl.dʒɪk/', cat: 'feelings', def: 'A warm longing for the past', example: 'Hearing that song made her feel deeply nostalgic.',
+        wrong: ['Looking only to the future', 'Feeling confused and lost', 'Excited about new things'] },
+    ];
+
+    let category = 'all', queue = [], qIdx = 0, score = 0;
+    let streak = 0, bestStreak = 0, answered = false;
+    let missed = [];
+
+    function setCategory(cat) {
+      category = cat;
+      document.querySelectorAll('.cat-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      const btn = document.getElementById('cat-' + cat);
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+      startGame();
+    }
+
+    function getPool() {
+      if (category === 'all') return ALL_WORDS;
+      return ALL_WORDS.filter(w => w.cat === category);
+    }
+
+    function startGame() {
+      const pool = getPool();
+      queue = [...pool].sort(() => Math.random() - 0.5).slice(0, Math.min(10, pool.length));
+      qIdx = 0; score = 0; streak = 0; bestStreak = 0; missed = [];
+      answered = false;
+
+      document.getElementById('score-val').textContent = '0';
+      document.getElementById('q-num').textContent = '1';
+      document.getElementById('q-total').textContent = queue.length;
+      document.getElementById('streak-row').textContent = '';
+      document.getElementById('summary-panel').classList.remove('show');
+      document.getElementById('game-area').style.display = 'block';
+
+      updateProgress(0);
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      answered = false;
+      const q = queue[qIdx];
+
+      document.getElementById('word-card').style.animation = 'none';
+      requestAnimationFrame(() => { document.getElementById('word-card').style.animation = ''; });
+
+      document.getElementById('word-cat').textContent     = q.cat.charAt(0).toUpperCase() + q.cat.slice(1);
+      document.getElementById('word-display').textContent = q.word;
+      document.getElementById('word-pos').textContent     = q.pos;
+      document.getElementById('word-pron').textContent    = q.pron;
+      document.getElementById('word-display').setAttribute('aria-label', 'Word: ' + q.word + ', ' + q.pos);
+
+      document.getElementById('feedback-area').className = 'feedback-area';
+      document.getElementById('feedback-area').textContent = '';
+      document.getElementById('next-btn').className = 'next-btn';
+
+      const choices = [q.def, ...q.wrong].sort(() => Math.random() - 0.5);
+      const grid = document.getElementById('choices-grid');
+      grid.innerHTML = '';
+      choices.forEach((c, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.textContent = c;
+        btn.setAttribute('aria-label', 'Choice ' + (i + 1) + ': ' + c);
+        btn.onclick = () => handleChoice(btn, c === q.def, q);
+        grid.appendChild(btn);
+      });
+
+      announce('Question ' + (qIdx + 1) + ' of ' + queue.length + '. Define the word: ' + q.word + ', ' + q.pos + '.');
+    }
+
+    function handleChoice(btn, isCorrect, q) {
+      if (answered) return;
+      answered = true;
+
+      document.querySelectorAll('.choice-btn').forEach(b => {
+        b.disabled = true;
+        if (b.textContent === q.def) b.classList.add('correct');
+      });
+
+      const fb = document.getElementById('feedback-area');
+      document.getElementById('next-btn').className = 'next-btn show';
+
+      if (isCorrect) {
+        btn.classList.add('correct');
+        score++;
+        streak++;
+        bestStreak = Math.max(bestStreak, streak);
+        document.getElementById('score-val').textContent = score;
+        const streakMsg = streak >= 3 ? ' 🔥 ' + streak + ' in a row!' : '';
+        document.getElementById('streak-row').innerHTML = streak >= 3 ? '<span class="streak-val">🔥 ' + streak + ' in a row!</span>' : '';
+        document.getElementById('feedback-text').textContent = '✅ Correct! ' + q.word + ' means: ' + q.def + '.';
+        document.getElementById('feedback-example').textContent = '"' + q.example + '"';
+        fb.className = 'feedback-area show good';
+        announce('Correct! ' + streakMsg);
+      } else {
+        btn.classList.add('wrong');
+        streak = 0;
+        document.getElementById('streak-row').textContent = '';
+        missed.push(q);
+        document.getElementById('feedback-text').textContent = '❌ Not quite. ' + q.word + ' means: ' + q.def + '.';
+        document.getElementById('feedback-example').textContent = '"' + q.example + '"';
+        fb.className = 'feedback-area show bad';
+        announce('Incorrect. ' + q.word + ' means ' + q.def);
+      }
+
+      updateProgress(((qIdx + 1) / queue.length) * 100);
+    }
+
+    function nextQuestion() {
+      qIdx++;
+      if (qIdx >= queue.length) {
+        showSummary();
+      } else {
+        document.getElementById('q-num').textContent = qIdx + 1;
+        loadQuestion();
+      }
+    }
+
+    function showSummary() {
+      document.getElementById('game-area').style.display = 'none';
+      const wrong = queue.length - score;
+      const pct = Math.round((score / queue.length) * 100);
+
+      document.getElementById('sum-score').textContent = score;
+      document.getElementById('sum-wrong').textContent = wrong;
+      document.getElementById('sum-pct').textContent = pct + '%';
+      document.getElementById('sum-streak').textContent = bestStreak;
+
+      const titles = pct === 100 ? '🌟 Perfect score!' : pct >= 80 ? '🎉 Excellent!' : pct >= 60 ? '😊 Good job!' : '💪 Keep learning!';
+      document.getElementById('sum-title').textContent = titles;
+      document.getElementById('sum-sub').textContent = 'You got ' + score + ' out of ' + queue.length + ' correct.';
+
+      const missedSec = document.getElementById('missed-section');
+      if (missed.length > 0) {
+        missedSec.innerHTML = '<h3>Words to review:</h3>';
+        missed.forEach(w => {
+          const div = document.createElement('div');
+          div.className = 'missed-item';
+          div.innerHTML = '<strong>' + w.word + '</strong> <em>(' + w.pos + ')</em><br/><span class="answer">Correct: ' + w.def + '</span>';
+          missedSec.appendChild(div);
+        });
+      } else {
+        missedSec.innerHTML = '<p style="color:var(--g2); font-weight:700; text-align:center; margin-bottom:1rem;">No mistakes — amazing! 🌿</p>';
+      }
+
+      document.getElementById('summary-panel').classList.add('show');
+      announce('Game over! You scored ' + score + ' out of ' + queue.length + '. ' + titles);
+    }
+
+    function updateProgress(pct) {
+      document.getElementById('prog-fill').style.width = pct + '%';
+      document.getElementById('prog-wrap').setAttribute('aria-valuenow', Math.round(pct));
+    }
+
+    function announce(msg) {
+      const el = document.getElementById('sr-announce');
+      el.textContent = '';
+      requestAnimationFrame(() => { el.textContent = msg; });
+    }
+
+    // Start on load
+    startGame();
+  </script>
+
+</body>
+</html>
