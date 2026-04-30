@@ -12,7 +12,7 @@
   const style = document.createElement('style');
   style.id = 'bw-style';
   style.textContent = `
-    /* Black & white mode — overrides all colour variables */
+    /* Black & white mode — overrides all color variables */
     body.bw-mode {
       filter: grayscale(100%) contrast(1.25);
     }
@@ -43,7 +43,7 @@
     const btn = document.createElement('button');
     btn.id = 'bw-toggle';
     btn.setAttribute('aria-pressed', isOn ? 'true' : 'false');
-    btn.setAttribute('aria-label', isOn ? 'Switch to colour mode' : 'Switch to black and white mode for easier reading');
+    btn.setAttribute('aria-label', isOn ? 'Switch to color mode' : 'Switch to black and white mode for easier reading');
     btn.title = 'Toggle black & white mode';
  
     btn.style.cssText = `
@@ -77,11 +77,11 @@
       const nowOn = document.body.classList.toggle('bw-mode');
       localStorage.setItem(BW_KEY, nowOn ? 'on' : 'off');
       btn.setAttribute('aria-pressed', nowOn ? 'true' : 'false');
-      btn.setAttribute('aria-label', nowOn ? 'Switch to colour mode' : 'Switch to black and white mode for easier reading');
+      btn.setAttribute('aria-label', nowOn ? 'Switch to color mode' : 'Switch to black and white mode for easier reading');
       updateLabel(btn, nowOn);
  
       /* Announce change to screen readers */
-      announce(nowOn ? 'Black and white mode on' : 'Colour mode on');
+      announce(nowOn ? 'Black and white mode on' : 'Color mode on');
     });
  
     btn.addEventListener('keydown', e => {
@@ -93,7 +93,7 @@
  
   function updateLabel(btn, isOn) {
     btn.innerHTML = isOn
-      ? '<span aria-hidden="true" style="font-size:16px;">🎨</span> Colour mode'
+      ? '<span aria-hidden="true" style="font-size:16px;">🎨</span> Color mode'
       : '<span aria-hidden="true" style="font-size:16px;">⬛</span> B&amp;W mode';
   }
  
