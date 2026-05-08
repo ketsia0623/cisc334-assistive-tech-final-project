@@ -1,148 +1,103 @@
 /* ─────────────────────────────────────────────
    MindBloom — Shared Accessibility Script
    Handles high-contrast mode across all pages.
-   Pressing the toggle switches to a pure black
-   background with white text (and back).
    The preference is saved in localStorage so it
    persists when the user navigates between pages.
 ───────────────────────────────────────────── */
-
+ 
 (function () {
-  const HC_KEY = 'mindbloom-hc-mode';
-
+  const BW_KEY = 'mindbloom-bw-mode';
+ 
   /* ── Inject the high-contrast CSS override ── */
   const style = document.createElement('style');
-  style.id = 'hc-style';
+  style.id = 'bw-style';
   style.textContent = `
-    /* High-contrast mode — pure black bg, white text */
-    body.hc-mode {
-      background: #000 !important;
-      color: #fff !important;
+    /* High-contrast mode — black background, white text, no color filtering */
+    body.bw-mode,
+    body.bw-mode * {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      border-color: #ffffff !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
     }
-    body.hc-mode header,
-    body.hc-mode footer {
-      background: #000 !important;
-      border-color: #333 !important;
+ 
+    /* Preserve images and media (don't invert them) */
+    body.bw-mode img,
+    body.bw-mode video,
+    body.bw-mode canvas,
+    body.bw-mode svg {
+      filter: grayscale(100%) contrast(1.2) !important;
     }
-    body.hc-mode .hero {
-      background: #000 !important;
+ 
+    /* Links should be clearly distinguishable */
+    body.bw-mode a,
+    body.bw-mode a * {
+      color: #ffff00 !important;
+      text-decoration: underline !important;
     }
-    body.hc-mode #games-section {
-      background: #000 !important;
+ 
+    /* Buttons: white background, black text for max contrast */
+    body.bw-mode button,
+    body.bw-mode [role="button"],
+    body.bw-mode input[type="button"],
+    body.bw-mode input[type="submit"],
+    body.bw-mode button *,
+    body.bw-mode [role="button"] * {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      border: 2px solid #ffffff !important;
     }
-    body.hc-mode .game-card {
-      background: #111 !important;
-      border-color: #444 !important;
-      color: #fff !important;
+ 
+    /* Inputs and form fields */
+    body.bw-mode input,
+    body.bw-mode textarea,
+    body.bw-mode select {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      border: 2px solid #ffffff !important;
     }
-    body.hc-mode .game-card:hover {
-      background: #1a1a1a !important;
+ 
+    /* The toggle button itself — keep it distinct */
+    body.bw-mode #bw-toggle,
+    body.bw-mode #bw-toggle * {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      border: 2px solid #ffffff !important;
     }
-    body.hc-mode .card-title,
-    body.hc-mode .card-number,
-    body.hc-mode .card-tag,
-    body.hc-mode .card-desc,
-    body.hc-mode .card-cta {
-      color: #fff !important;
+ 
+    /* Focus rings — thick and visible */
+    body.bw-mode *:focus-visible {
+      outline: 3px solid #ffff00 !important;
+      outline-offset: 2px !important;
     }
-    body.hc-mode .card-topline {
-      background: #fff !important;
-    }
-    body.hc-mode .games-title,
-    body.hc-mode .games-sub,
-    body.hc-mode .section-eyebrow {
-      color: #fff !important;
-    }
-    body.hc-mode .section-eyebrow::before {
-      background: #fff !important;
-    }
-    body.hc-mode .logo,
-    body.hc-mode nav a {
-      color: #fff !important;
-    }
-    body.hc-mode .logo-mark {
-      border-color: #fff !important;
-    }
-    body.hc-mode .hero-title,
-    body.hc-mode .hero-title em,
-    body.hc-mode .hero-body,
-    body.hc-mode .hero-label,
-    body.hc-mode .frame-caption,
-    body.hc-mode .stat-num,
-    body.hc-mode .stat-lbl,
-    body.hc-mode .footer-logo,
-    body.hc-mode .footer-note {
-      color: #fff !important;
-    }
-    body.hc-mode .chip {
-      color: #fff !important;
-      border-color: #555 !important;
-    }
-    body.hc-mode .btn-primary {
-      background: #fff !important;
-      color: #000 !important;
-    }
-    body.hc-mode .btn-ghost {
-      color: #ccc !important;
-    }
-    body.hc-mode .nav-cta {
-      background: #fff !important;
-      color: #000 !important;
-    }
-    body.hc-mode .hero-wave svg path {
-      fill: #000 !important;
-    }
-    body.hc-mode .hero-plant-frame {
-      border-color: #444 !important;
-    }
-    body.hc-mode .corner--tl,
-    body.hc-mode .corner--tr,
-    body.hc-mode .corner--bl,
-    body.hc-mode .corner--br {
-      border-color: #666 !important;
-    }
-    body.hc-mode .hero-stats {
-      border-color: #333 !important;
-    }
-    body.hc-mode .stat {
-      border-color: #333 !important;
-    }
-    body.hc-mode .games-grid {
-      background: #333 !important;
-      border-color: #333 !important;
-    }
-    body.hc-mode .footer-nav a {
-      color: #ccc !important;
-    }
-    /* Focus rings always visible */
-    body.hc-mode *:focus-visible {
-      outline: 3px solid #fff !important;
-      outline-offset: 3px !important;
-    }
-    /* Keep the toggle button itself clean */
-    body.hc-mode #hc-toggle {
-      background: #fff !important;
-      color: #000 !important;
-      border-color: #fff !important;
+ 
+    /* Cards / panels */
+    body.bw-mode [class*="card"],
+    body.bw-mode [class*="panel"],
+    body.bw-mode [class*="modal"],
+    body.bw-mode [class*="dropdown"] {
+      background-color: #000000 !important;
+      border: 1px solid #ffffff !important;
     }
   `;
   document.head.appendChild(style);
-
+ 
   /* ── Apply saved preference immediately (before paint) ── */
-  if (localStorage.getItem(HC_KEY) === 'on') {
-    document.body.classList.add('hc-mode');
+  if (localStorage.getItem(BW_KEY) === 'on') {
+    document.body.classList.add('bw-mode');
   }
-
+ 
   /* ── Build the toggle button ── */
   function createButton() {
-    const isOn = document.body.classList.contains('hc-mode');
-
+    const isOn = document.body.classList.contains('bw-mode');
+ 
     const btn = document.createElement('button');
-    btn.id = 'hc-toggle';
+    btn.id = 'bw-toggle';
     btn.setAttribute('aria-pressed', isOn ? 'true' : 'false');
-    btn.setAttribute('aria-label', isOn ? 'Switch to normal contrast mode' : 'Switch to high contrast mode: black background, white text');
+    btn.setAttribute('aria-label', isOn ? 'Switch to color mode' : 'Switch to high contrast mode for easier reading');
     btn.title = 'Toggle high contrast mode';
-
+ 
     btn.style.cssText = `
       position: fixed;
       bottom: 1.5rem;
@@ -153,54 +108,53 @@
       gap: 8px;
       padding: 10px 18px;
       border-radius: 30px;
-      border: 2px solid #8ab86a;
-      background: #111;
-      color: #c8dab4;
-      font-family: 'Epilogue', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
+      border: 2px solid #97C459;
+      background: #173404;
+      color: #C0DD97;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
       transition: background 0.2s, color 0.2s, transform 0.15s;
       line-height: 1;
-      letter-spacing: 0.04em;
     `;
-
+ 
     updateLabel(btn, isOn);
-
+ 
     btn.addEventListener('mouseenter', () => { btn.style.transform = 'scale(1.05)'; });
     btn.addEventListener('mouseleave', () => { btn.style.transform = 'scale(1)'; });
-
+ 
     btn.addEventListener('click', () => {
-      const nowOn = document.body.classList.toggle('hc-mode');
-      localStorage.setItem(HC_KEY, nowOn ? 'on' : 'off');
+      const nowOn = document.body.classList.toggle('bw-mode');
+      localStorage.setItem(BW_KEY, nowOn ? 'on' : 'off');
       btn.setAttribute('aria-pressed', nowOn ? 'true' : 'false');
-      btn.setAttribute('aria-label', nowOn
-        ? 'Switch to normal contrast mode'
-        : 'Switch to high contrast mode: black background, white text');
+      btn.setAttribute('aria-label', nowOn ? 'Switch to color mode' : 'Switch to high contrast mode for easier reading');
       updateLabel(btn, nowOn);
-      announce(nowOn ? 'High contrast mode on' : 'Normal contrast mode on');
+ 
+      /* Announce change to screen readers */
+      announce(nowOn ? 'High contrast mode on' : 'Color mode on');
     });
-
+ 
     btn.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
     });
-
+ 
     document.body.appendChild(btn);
   }
-
+ 
   function updateLabel(btn, isOn) {
     btn.innerHTML = isOn
-      ? '<span aria-hidden="true" style="font-size:15px;">◑</span> Normal'
-      : '<span aria-hidden="true" style="font-size:15px;">◑</span> High contrast';
+      ? '<span aria-hidden="true" style="font-size:16px;">🎨</span> Color mode'
+      : '<span aria-hidden="true" style="font-size:16px;">⬛</span> High contrast';
   }
-
+ 
   /* ── Screen reader live announcement ── */
   function announce(msg) {
-    let el = document.getElementById('hc-announce');
+    let el = document.getElementById('bw-announce');
     if (!el) {
       el = document.createElement('div');
-      el.id = 'hc-announce';
+      el.id = 'bw-announce';
       el.setAttribute('aria-live', 'polite');
       el.setAttribute('aria-atomic', 'true');
       el.style.cssText = 'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);';
@@ -209,7 +163,7 @@
     el.textContent = '';
     requestAnimationFrame(() => { el.textContent = msg; });
   }
-
+ 
   /* ── Wait for DOM then insert button ── */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', createButton);
