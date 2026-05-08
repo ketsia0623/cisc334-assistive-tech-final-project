@@ -5,7 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MindBloom </title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <!--
+    Font choices:
+    • Atkinson Hyperlegible — body & UI text
+      Designed by the Braille Institute specifically for readers with low vision
+      and dyslexia. Each character has highly distinct shapes so similar-looking
+      letters (b/d, p/q, i/l/1) are easy to tell apart.
+    • Fraunces — display/headings only (large sizes, so fine for dyslexic readers)
+  -->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
   <style>
     /* ─────────────────────────────────────────
        DESIGN TOKENS
@@ -32,16 +40,25 @@
       --rust:      #bf4a10;
       --focus:     #0057b8;
       --focus-bg:  #e8f0fe;
+
+      /* Dyslexia-friendly typography settings */
+      --body-font: 'Atkinson Hyperlegible', sans-serif;
+      --display-font: 'Fraunces', serif;
+      --line-height-body: 1.85;   /* extra line height aids tracking */
+      --letter-spacing-body: 0.01em; /* slight spacing helps letter distinction */
+      --word-spacing: 0.05em;     /* slightly more space between words */
     }
 
     /* ── RESET & BASE ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; font-size: 18px; }
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: var(--body-font);
       background: var(--paper);
       color: var(--body-text);
-      line-height: 1.7;
+      line-height: var(--line-height-body);
+      letter-spacing: var(--letter-spacing-body);
+      word-spacing: var(--word-spacing);
       overflow-x: hidden;
     }
 
@@ -90,7 +107,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
     .logo-name {
-      font-family: 'Fraunces', serif;
+      font-family: var(--display-font);
       font-size: 1.4rem; font-weight: 900;
       color: #fff; letter-spacing: -0.5px;
     }
@@ -102,6 +119,7 @@
       color: #c8e8b0; font-size: 1rem; font-weight: 700;
       text-decoration: none; padding: 10px 16px; border-radius: 8px;
       transition: background 0.15s, color 0.15s; white-space: nowrap;
+      font-family: var(--body-font);
     }
     nav a:hover { background: rgba(255,255,255,0.1); color: #fff; }
     nav a:focus-visible { outline: 3px solid var(--mint); outline-offset: 2px; }
@@ -118,14 +136,12 @@
       position: relative; overflow: hidden;
       padding: 0;
     }
-    /* Organic wavy bottom edge */
     .hero-wave {
       position: absolute; bottom: -2px; left: 0; right: 0;
       line-height: 0; z-index: 3;
     }
     .hero-wave svg { display: block; width: 100%; }
 
-    /* Background texture dots */
     .hero::before {
       content: '';
       position: absolute; inset: 0; z-index: 0;
@@ -153,6 +169,7 @@
       padding: 6px 14px; border-radius: 30px;
       margin-bottom: 1.5rem;
       letter-spacing: 0.5px;
+      font-family: var(--body-font);
     }
     .hero-kicker .dot {
       width: 7px; height: 7px; background: var(--sage);
@@ -164,7 +181,7 @@
     }
 
     .hero-title {
-      font-family: 'Fraunces', serif;
+      font-family: var(--display-font);
       font-size: clamp(2.4rem, 5vw, 4rem);
       font-weight: 900; line-height: 1.1;
       color: #fff; letter-spacing: -1.5px;
@@ -184,10 +201,11 @@
     }
 
     .hero-desc {
-      font-size: 1.15rem; font-weight: 600;
+      font-size: 1.15rem; font-weight: 400;
       color: rgba(255,255,255,0.88);
-      line-height: 1.8; max-width: 500px;
+      line-height: 1.9; max-width: 500px;
       margin-bottom: 2.5rem;
+      font-family: var(--body-font);
     }
 
     .hero-btns {
@@ -197,12 +215,13 @@
     .btn-hero-primary {
       display: inline-flex; align-items: center; gap: 10px;
       background: var(--sage); color: var(--forest);
-      font-size: 1.05rem; font-weight: 800;
+      font-size: 1.05rem; font-weight: 700;
       padding: 16px 32px; border-radius: 50px;
       text-decoration: none;
       box-shadow: 0 4px 20px rgba(107,191,62,0.4);
       transition: background 0.15s, transform 0.12s, box-shadow 0.15s;
       min-height: 56px;
+      font-family: var(--body-font);
     }
     .btn-hero-primary:hover {
       background: var(--mint); transform: translateY(-2px);
@@ -220,6 +239,7 @@
       text-decoration: none;
       transition: background 0.15s, border-color 0.15s;
       min-height: 56px;
+      font-family: var(--body-font);
     }
     .btn-hero-ghost:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.6); }
     .btn-hero-ghost:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
@@ -236,6 +256,7 @@
       color: #c8e8b0;
       font-size: 0.9rem; font-weight: 700;
       padding: 7px 15px; border-radius: 30px;
+      font-family: var(--body-font);
     }
     .chip-tick { color: var(--sage); font-size: 1rem; }
 
@@ -256,7 +277,7 @@
     }
     .hero-plant-card svg { width: 180px; height: 180px; margin: 0 auto 1.25rem; display: block; }
     .plant-caption {
-      font-family: 'Fraunces', serif;
+      font-family: var(--display-font);
       font-style: italic;
       font-size: 1.15rem; font-weight: 700;
       color: var(--mint); line-height: 1.5;
@@ -274,7 +295,7 @@
       text-align: center;
     }
     .stat-num {
-      font-family: 'Fraunces', serif;
+      font-family: var(--display-font);
       font-size: 1.8rem; font-weight: 900;
       color: var(--mint); line-height: 1;
       display: block; margin-bottom: 4px;
@@ -283,6 +304,7 @@
       font-size: 0.8rem; font-weight: 700;
       color: rgba(255,255,255,0.65);
       letter-spacing: 0.3px;
+      font-family: var(--body-font);
     }
 
     /* ── SECTION SHARED ── */
@@ -291,17 +313,18 @@
 
     .eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
-      font-size: 0.82rem; font-weight: 800;
+      font-size: 0.82rem; font-weight: 700;
       color: var(--fern);
       background: var(--sage-bg);
       border: 1.5px solid #b8dba0;
       padding: 5px 14px; border-radius: 20px;
-      letter-spacing: 1px; text-transform: uppercase;
+      letter-spacing: 0.8px; text-transform: uppercase;
       margin-bottom: 1rem;
+      font-family: var(--body-font);
     }
 
     .section-title {
-      font-family: 'Fraunces', serif;
+      font-family: var(--display-font);
       font-size: clamp(1.8rem, 3.5vw, 2.8rem);
       font-weight: 900; line-height: 1.15;
       color: var(--forest); letter-spacing: -0.8px;
@@ -310,9 +333,10 @@
     .section-title em { font-style: italic; color: var(--fern); }
 
     .section-sub {
-      font-size: 1.05rem; font-weight: 600;
-      color: var(--muted); line-height: 1.75;
+      font-size: 1.05rem; font-weight: 400;
+      color: var(--muted); line-height: 1.9;
       max-width: 560px; margin-bottom: 3rem;
+      font-family: var(--body-font);
     }
 
     /* ── GAMES ── */
@@ -363,40 +387,41 @@
 
     .card-tag {
       display: inline-block;
-      font-size: 0.75rem; font-weight: 800;
+      font-size: 0.75rem; font-weight: 700;
       color: var(--fern);
       background: var(--sage-bg);
       border: 1.5px solid #b8dba0;
       padding: 3px 10px; border-radius: 6px;
-      letter-spacing: 0.5px; text-transform: uppercase;
+      letter-spacing: 0.3px; text-transform: uppercase;
       width: fit-content;
+      font-family: var(--body-font);
     }
 
     .card-title {
-      font-family: 'Fraunces', serif;
+      font-family: var(--display-font);
       font-size: 1.4rem; font-weight: 700;
       color: var(--forest); line-height: 1.2;
       letter-spacing: -0.3px;
     }
 
     .card-desc {
-      font-size: 1rem; font-weight: 600;
-      color: var(--muted); line-height: 1.7; flex: 1;
+      font-size: 1rem; font-weight: 400;
+      color: var(--muted); line-height: 1.85; flex: 1;
+      font-family: var(--body-font);
     }
 
     .card-cta {
       display: inline-flex; align-items: center; gap: 8px;
       background: var(--forest); color: #fff;
-      font-size: 0.95rem; font-weight: 800;
+      font-size: 0.95rem; font-weight: 700;
       padding: 12px 22px; border-radius: 30px;
       text-decoration: none; width: fit-content;
       margin-top: 0.5rem;
       transition: background 0.15s, transform 0.1s;
       min-height: 48px;
+      font-family: var(--body-font);
     }
     .card-cta:hover { background: var(--canopy); transform: translateX(2px); }
-
-    
 
     /* ── CTA BANNER ── */
     .cta-band {
@@ -419,25 +444,27 @@
       gap: 2.5rem; flex-wrap: wrap;
     }
     .cta-inner h2 {
-      font-family: 'Fraunces', serif;
+      font-family: var(--display-font);
       font-size: clamp(1.8rem, 3.5vw, 2.6rem);
       font-weight: 900; color: #fff;
       letter-spacing: -0.5px; margin-bottom: 0.5rem;
     }
     .cta-inner p {
-      font-size: 1.05rem; font-weight: 600;
+      font-size: 1.05rem; font-weight: 400;
       color: rgba(255,255,255,0.82); max-width: 480px;
-      line-height: 1.7;
+      line-height: 1.9;
+      font-family: var(--body-font);
     }
     .cta-btn {
       display: inline-flex; align-items: center; gap: 10px;
       background: #fff; color: var(--forest);
-      font-size: 1.05rem; font-weight: 800;
+      font-size: 1.05rem; font-weight: 700;
       padding: 18px 36px; border-radius: 50px;
       text-decoration: none; flex-shrink: 0;
       min-height: 60px;
       box-shadow: 0 6px 24px rgba(0,0,0,0.2);
       transition: background 0.15s, transform 0.12s;
+      font-family: var(--body-font);
     }
     .cta-btn:hover { background: var(--sage-bg); transform: translateY(-2px); }
     .cta-btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
@@ -455,13 +482,14 @@
       flex-wrap: wrap; gap: 1.5rem;
     }
     .footer-logo {
-      font-family: 'Fraunces', serif;
+      font-family: var(--display-font);
       font-size: 1.25rem; font-weight: 900;
       color: var(--mint); letter-spacing: -0.3px;
     }
     .footer-note {
-      font-size: 0.9rem; font-weight: 600;
+      font-size: 0.9rem; font-weight: 400;
       color: rgba(255,255,255,0.38);
+      font-family: var(--body-font);
     }
     .footer-nav { display: flex; gap: 1.5rem; flex-wrap: wrap; list-style: none; }
     .footer-nav a {
@@ -469,6 +497,7 @@
       color: rgba(255,255,255,0.48); text-decoration: none;
       padding: 4px 2px;
       transition: color 0.15s;
+      font-family: var(--body-font);
     }
     .footer-nav a:hover { color: var(--mint); }
     .footer-nav a:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
@@ -528,9 +557,6 @@
     </div>
   </header>
 
- 
-
-
   <!-- ══ GAMES ══ -->
   <section id="games" class="games-bg section-pad" aria-labelledby="games-heading">
     <div class="section-center">
@@ -577,14 +603,10 @@
     </div>
   </section>
 
-  
-
   <!-- ══ FOOTER ══ -->
   <footer role="contentinfo">
     <div class="footer-inner">
       <span class="footer-logo">🌱 MindBloom</span>
-  
-  
     </div>
   </footer>
 
