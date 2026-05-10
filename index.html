@@ -372,18 +372,7 @@
     .game-card:hover::before { opacity: 1; }
     .game-card:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
 
-    .card-icon-wrap {
-      width: 68px; height: 68px;
-      background: var(--sage-bg);
-      border: 2px solid #c8e4b4;
-      border-radius: 18px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2rem;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .game-card:hover .card-icon-wrap {
-      background: #d4f0bc; border-color: var(--sage);
-    }
+
 
     .card-tag {
       display: inline-block;
@@ -560,7 +549,7 @@
   <!-- ══ GAMES ══ -->
   <section id="games" class="games-bg section-pad" aria-labelledby="games-heading">
     <div class="section-center">
-      <span class="eyebrow" aria-hidden="true"> The games</span>
+      <!-- <span class="eyebrow" aria-hidden="true"> The games</span> -->
       <h2 class="section-title" id="games-heading">Pick your <em>exercise</em></h2>
       <p class="section-sub">Three games, each working a different part of your memory. All free, no timers — take as long as you need.</p>
 
@@ -568,33 +557,30 @@
 
         <a href="memory-match.html" class="game-card" role="listitem"
            aria-label="Memory Match — flip cards to find matching pairs. Visual memory game.">
-          <div class="card-icon-wrap" aria-hidden="true">🃏</div>
           <span class="card-tag">Visual memory</span>
           <h3 class="card-title">Memory Match</h3>
           <p class="card-desc">
-            Flip cards over to find every matching pair. A calming visual exercise — unlimited tries, absolutely no time pressure.
+            Flip cards over to find every matching pair. No time limit!
           </p>
           <span class="card-cta">Play now <span aria-hidden="true">→</span></span>
         </a>
 
         <a href="face-recall.html" class="game-card" role="listitem"
            aria-label="Face Recall — study a person's name and face, then recall it. Real-world memory game.">
-          <div class="card-icon-wrap" aria-hidden="true">👥</div>
           <span class="card-tag">Real-world names</span>
           <h3 class="card-title">Face Recall</h3>
           <p class="card-desc">
-            Study a person's face, name, and role. Then recall their name from memory. Builds real-world name recognition skills.
+            Build your real world face-name recall by matching names to faces, jobs, and fun facts!
           </p>
           <span class="card-cta">Play now <span aria-hidden="true">→</span></span>
         </a>
 
         <a href="vocab-practice.html" class="game-card" role="listitem"
            aria-label="Vocab Practice — match words to their definitions. Language learning game.">
-          <div class="card-icon-wrap" aria-hidden="true">📖</div>
           <span class="card-tag">Language &amp; learning</span>
           <h3 class="card-title">Vocab Practice</h3>
           <p class="card-desc">
-            See a word, then choose the right definition from four options. Detailed explanations after every answer help it stick.
+            Practice vocabulary by matching words to their definitions.
           </p>
           <span class="card-cta">Play now <span aria-hidden="true">→</span></span>
         </a>
