@@ -435,6 +435,9 @@
     }
 
     function showSuccess() {
+      localStorage.setItem('mb-progress', parseInt(localStorage.getItem('mb-progress') || '0') + 1);
+      document.getElementById('game-area').style.display = 'none';
+    
       const panel = document.getElementById('success-panel');
       document.getElementById('final-moves').textContent = moves;
       document.getElementById('final-pairs').textContent = matchedCount;
@@ -453,6 +456,6 @@
     // Start on load
     startGame();
   </script>
-
+<script src="accessibility.js"></script>
 </body>
 </html>
