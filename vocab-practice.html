@@ -66,7 +66,7 @@
     /* MAIN */
     main {
       flex: 1;
-      max-width: 680px;
+      max-width: 700px;
       width: 100%;
       margin: 0 auto;
       padding: 2rem 1.5rem;
@@ -81,6 +81,32 @@
       margin-bottom: 6px;
     }
     .page-header p { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── MODE TABS ── */
+    .mode-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+    .mode-tab {
+      background: white;
+      border: 2px solid var(--g5);
+      color: var(--g2);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      padding: 9px 22px;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mode-tab:hover { background: var(--g6); }
+    .mode-tab.active { background: var(--g1); color: var(--g6); border-color: var(--g1); }
+    .mode-tab:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
 
     /* CATEGORY SELECTOR */
     .category-bar {
@@ -219,33 +245,15 @@
     .choice-btn:hover:not(:disabled) { border-color: var(--g4); background: var(--g7); }
     .choice-btn:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
     .choice-btn:disabled { cursor: not-allowed; }
-    .choice-btn.correct {
-      background: var(--g6);
-      border-color: var(--g3);
-      color: var(--g1);
-    }
+    .choice-btn.correct { background: var(--g6); border-color: var(--g3); color: var(--g1); }
     .choice-btn.correct::after {
-      content: '✓';
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-weight: 800;
-      color: var(--g2);
+      content: '✓'; position: absolute; right: 14px; top: 50%;
+      transform: translateY(-50%); font-weight: 800; color: var(--g2);
     }
-    .choice-btn.wrong {
-      background: var(--orange-light);
-      border-color: var(--orange);
-      color: var(--g1);
-    }
+    .choice-btn.wrong { background: var(--orange-light); border-color: var(--orange); color: var(--g1); }
     .choice-btn.wrong::after {
-      content: '✗';
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-weight: 800;
-      color: var(--orange);
+      content: '✗'; position: absolute; right: 14px; top: 50%;
+      transform: translateY(-50%); font-weight: 800; color: var(--orange);
     }
 
     /* FEEDBACK */
@@ -260,27 +268,16 @@
     .feedback-area.show { display: block; }
     .feedback-area.good { background: var(--g7); border: 1.5px solid var(--g5); color: var(--g2); }
     .feedback-area.bad  { background: var(--orange-light); border: 1.5px solid var(--orange); color: var(--g1); }
-    .feedback-area .example {
-      margin-top: 8px;
-      font-style: italic;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
+    .feedback-area .example { margin-top: 8px; font-style: italic; font-size: 14px; color: var(--text-muted); }
 
     /* NEXT BUTTON */
     .next-btn {
       display: none;
       width: 100%;
-      background: var(--g3);
-      color: white;
-      border: none;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 16px;
-      padding: 14px;
-      border-radius: 14px;
-      cursor: pointer;
-      transition: background 0.2s;
+      background: var(--g3); color: white; border: none;
+      font-family: 'Nunito', sans-serif; font-weight: 800;
+      font-size: 16px; padding: 14px; border-radius: 14px;
+      cursor: pointer; transition: background 0.2s;
     }
     .next-btn.show { display: block; }
     .next-btn:hover { background: var(--g2); }
@@ -288,70 +285,302 @@
 
     /* SUMMARY PANEL */
     .summary-panel {
-      background: white;
-      border: 3px solid var(--g4);
-      border-radius: 20px;
-      padding: 2.5rem 2rem;
-      text-align: center;
-      display: none;
+      background: white; border: 3px solid var(--g4);
+      border-radius: 20px; padding: 2.5rem 2rem;
+      text-align: center; display: none;
       animation: popIn 0.4s cubic-bezier(.175,.885,.32,1.275) both;
     }
     .summary-panel.show { display: block; }
-    @keyframes popIn {
-      from { transform: scale(0.85); opacity: 0; }
-      to   { transform: scale(1); opacity: 1; }
-    }
+    @keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .summary-panel .trophy { font-size: 56px; margin-bottom: 1rem; }
     .summary-panel h2 { font-family: 'Fredoka One', cursive; font-size: 28px; color: var(--g1); margin-bottom: 8px; }
     .summary-panel .sub { color: var(--text-muted); font-size: 15px; margin-bottom: 1.5rem; }
-    .summary-stats {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .sum-stat {
-      background: var(--g7);
-      border: 1.5px solid var(--g5);
-      border-radius: 12px;
-      padding: 0.75rem 1.5rem;
-    }
+    .summary-stats { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .sum-stat { background: var(--g7); border: 1.5px solid var(--g5); border-radius: 12px; padding: 0.75rem 1.5rem; }
     .sum-stat .val { font-family: 'Fredoka One', cursive; font-size: 28px; color: var(--g1); }
     .sum-stat .lbl { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 
     /* MISSED WORDS */
     .missed-section { text-align: left; margin-bottom: 1.5rem; }
     .missed-section h3 { font-family: 'Fredoka One', cursive; font-size: 18px; color: var(--g1); margin-bottom: 10px; }
-    .missed-item {
-      background: var(--orange-light);
-      border: 1px solid var(--orange);
-      border-radius: 12px;
-      padding: 10px 14px;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
+    .missed-item { background: var(--orange-light); border: 1px solid var(--orange); border-radius: 12px; padding: 10px 14px; margin-bottom: 8px; font-size: 14px; }
     .missed-item strong { color: var(--g1); }
     .missed-item .answer { color: var(--text-muted); }
 
-    .restart-btn {
-      display: block;
+    .restart-btn, .summary-btn {
+      display: block; width: 100%; max-width: 320px;
+      margin: 0 auto 10px; background: var(--g3); color: white; border: none;
+      font-family: 'Nunito', sans-serif; font-weight: 800;
+      font-size: 16px; padding: 14px; border-radius: 14px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .restart-btn:hover, .summary-btn:hover { background: var(--g2); }
+    .restart-btn:focus-visible, .summary-btn:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
+    .summary-btn.secondary { background: white; color: var(--g2); border: 2px solid var(--g5); }
+    .summary-btn.secondary:hover { background: var(--g7); }
+
+    /* ══════════════════════════════════════
+       FLASHCARD MODE
+    ══════════════════════════════════════ */
+    #flashcard-area { display: none; }
+
+    .fc-meta {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .flashcard-wrap {
+      perspective: 1200px;
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+    }
+    .flashcard {
       width: 100%;
-      max-width: 320px;
-      margin: 0 auto;
-      background: var(--g3);
-      color: white;
-      border: none;
+      min-height: 240px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 24px;
+    }
+    .flashcard.flipped { transform: rotateY(180deg); }
+
+    .fc-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .fc-front {
+      background: white;
+      border: 2px solid var(--g5);
+    }
+    .fc-back {
+      background: var(--g1);
+      border: 2px solid var(--g3);
+      transform: rotateY(180deg);
+    }
+
+    .fc-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .fc-word {
+      font-family: 'Fredoka One', cursive;
+      font-size: 52px;
+      color: var(--g1);
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .fc-pos { font-size: 14px; color: var(--text-muted); font-style: italic; margin-bottom: 4px; }
+    .fc-pron { font-size: 13px; color: var(--g3); font-family: 'Courier New', monospace; }
+
+    .fc-back .fc-hint { color: var(--g6); opacity: 0.7; }
+    .fc-def {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--g6);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .fc-example {
+      font-size: 14px;
+      color: var(--g5);
+      font-style: italic;
+      line-height: 1.5;
+      opacity: 0.85;
+    }
+
+    .fc-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+    .fc-btn {
+      flex: 1;
+      background: white;
+      border: 2px solid var(--g5);
+      color: var(--g2);
       font-family: 'Nunito', sans-serif;
       font-weight: 800;
-      font-size: 16px;
-      padding: 14px;
+      font-size: 15px;
+      padding: 12px;
       border-radius: 14px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.15s;
     }
-    .restart-btn:hover { background: var(--g2); }
-    .restart-btn:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
+    .fc-btn:hover { background: var(--g6); }
+    .fc-btn:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
+    .fc-btn.primary { background: var(--g3); color: white; border-color: var(--g3); }
+    .fc-btn.primary:hover { background: var(--g2); }
+
+    .fc-progress-row {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .fc-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--g6);
+      transition: background 0.25s;
+    }
+    .fc-dot.seen { background: var(--g3); }
+    .fc-dot.current { background: var(--g4); outline: 2px solid var(--g2); outline-offset: 1px; }
+
+    /* ══════════════════════════════════════
+       ADD WORD PANEL
+    ══════════════════════════════════════ */
+    .add-word-section {
+      background: white;
+      border: 2px solid var(--g5);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .add-word-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+    .add-word-header h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 20px;
+      color: var(--g1);
+    }
+    .add-word-toggle {
+      background: var(--g7);
+      border: none;
+      color: var(--g2);
+      font-size: 20px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, transform 0.25s;
+      font-weight: 700;
+    }
+    .add-word-toggle:hover { background: var(--g6); }
+    .add-word-toggle.open { transform: rotate(45deg); }
+    .add-word-toggle:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
+
+    .add-word-form {
+      display: none;
+      margin-top: 1.25rem;
+      animation: fadeIn 0.25s ease both;
+    }
+    .add-word-form.open { display: block; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--g2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+      background: var(--g7);
+      border: 2px solid var(--g6);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--g4);
+    }
+    .form-group textarea { resize: vertical; min-height: 70px; }
+    .form-group select { cursor: pointer; }
+
+    .add-word-footer {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .form-submit-btn {
+      background: var(--g3); color: white; border: none;
+      font-family: 'Nunito', sans-serif; font-weight: 800;
+      font-size: 14px; padding: 10px 22px; border-radius: 12px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .form-submit-btn:hover { background: var(--g2); }
+    .form-submit-btn:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
+    .form-cancel-btn {
+      background: white; color: var(--g2); border: 2px solid var(--g5);
+      font-family: 'Nunito', sans-serif; font-weight: 800;
+      font-size: 14px; padding: 10px 22px; border-radius: 12px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .form-cancel-btn:hover { background: var(--g7); }
+    .form-cancel-btn:focus-visible { outline: 2px solid var(--g1); outline-offset: 2px; }
+
+    .form-error {
+      background: var(--orange-light); border: 1.5px solid var(--orange);
+      border-radius: 10px; padding: 10px 14px;
+      font-size: 13px; color: #7a2d12;
+      margin-top: 8px; display: none;
+    }
+    .form-error.show { display: block; }
+    .form-success {
+      background: var(--g7); border: 1.5px solid var(--g5);
+      border-radius: 10px; padding: 10px 14px;
+      font-size: 13px; color: var(--g2); font-weight: 700;
+      margin-top: 8px; display: none;
+    }
+    .form-success.show { display: block; }
+
+    /* Custom words list */
+    .custom-words-list { margin-top: 1rem; }
+    .custom-words-list h3 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 16px; color: var(--g1);
+      margin-bottom: 8px;
+    }
+    .custom-word-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--g7); border: 1.5px solid var(--g5);
+      border-radius: 20px; padding: 5px 12px;
+      font-size: 13px; font-weight: 700; color: var(--g2);
+      margin: 3px;
+    }
+    .remove-chip-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--orange); font-size: 14px; font-weight: 800;
+      padding: 0; line-height: 1; display: flex; align-items: center;
+    }
+    .remove-chip-btn:hover { color: #a83a1a; }
+    .remove-chip-btn:focus-visible { outline: 2px solid var(--orange); border-radius: 2px; }
 
     .sr-announce { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
   </style>
@@ -369,69 +598,187 @@
   <main id="main">
     <div class="page-header">
       <h1>Vocab Practice 📚</h1>
-      <p>Choose the correct definition for each word. Learn at your own pace!</p>
+      <p>Choose the correct definition, flip flashcards, or add your own words!</p>
     </div>
 
-    <!-- CATEGORY -->
-    <div class="category-bar" role="group" aria-label="Choose word category">
-      <button class="cat-btn active" id="cat-all"     onclick="setCategory('all')"     aria-pressed="true">All Words</button>
-      <button class="cat-btn"        id="cat-nature"  onclick="setCategory('nature')"  aria-pressed="false">Nature</button>
-      <button class="cat-btn"        id="cat-people"  onclick="setCategory('people')"  aria-pressed="false">People</button>
-      <button class="cat-btn"        id="cat-actions" onclick="setCategory('actions')" aria-pressed="false">Actions</button>
+    <!-- MODE TABS -->
+    <div class="mode-tabs" role="tablist" aria-label="Study mode">
+      <button class="mode-tab active" id="tab-quiz" role="tab" aria-selected="true"  onclick="switchMode('quiz')">🧠 Quiz</button>
+      <button class="mode-tab"        id="tab-flash" role="tab" aria-selected="false" onclick="switchMode('flash')">🃏 Flashcards</button>
+    </div>
+
+    <!-- ADD YOUR OWN WORDS -->
+    <div class="add-word-section" id="add-word-section">
+      <div class="add-word-header" onclick="toggleAddForm()" role="button" tabindex="0"
+           aria-expanded="false" aria-controls="add-word-form" id="add-word-header"
+           onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleAddForm()}">
+        <h2>➕ Add Your Own Word</h2>
+        <button class="add-word-toggle" id="add-toggle-btn" aria-label="Expand add word form" tabindex="-1">+</button>
+      </div>
+      <div class="add-word-form" id="add-word-form" aria-hidden="true">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inp-word">Word <span aria-hidden="true">*</span></label>
+            <input type="text" id="inp-word" placeholder="e.g. Ephemeral" aria-required="true" />
+          </div>
+          <div class="form-group">
+            <label for="inp-pos">Part of Speech</label>
+            <select id="inp-pos">
+              <option value="adjective">adjective</option>
+              <option value="noun">noun</option>
+              <option value="verb">verb</option>
+              <option value="adverb">adverb</option>
+              <option value="other">other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inp-pron">Pronunciation <em>(optional)</em></label>
+            <input type="text" id="inp-pron" placeholder="e.g. /ɪˈfɛm.ər.əl/" />
+          </div>
+          <div class="form-group">
+            <label for="inp-cat">Category</label>
+            <select id="inp-cat">
+              <option value="custom">My Words</option>
+              <option value="nature">Nature</option>
+              <option value="people">People</option>
+              <option value="actions">Actions</option>
+              <option value="feelings">Feelings</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+          <label for="inp-def">Definition <span aria-hidden="true">*</span></label>
+          <textarea id="inp-def" placeholder="Write the correct definition here…" aria-required="true"></textarea>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+          <label for="inp-example">Example sentence <em>(optional)</em></label>
+          <input type="text" id="inp-example" placeholder="Use the word in a sentence…" />
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+          <label for="inp-wrong">Wrong answers <em>(optional — separate with semicolons)</em></label>
+          <input type="text" id="inp-wrong" placeholder="e.g. Lasts forever; Very loud; Cold and icy" />
+        </div>
+        <div class="add-word-footer">
+          <button class="form-submit-btn" onclick="addCustomWord()">Add Word</button>
+          <button class="form-cancel-btn" onclick="toggleAddForm()">Cancel</button>
+        </div>
+        <div class="form-error" id="form-error" role="alert"></div>
+        <div class="form-success" id="form-success" role="status"></div>
+      </div>
+      <!-- custom words chips -->
+      <div class="custom-words-list" id="custom-words-list" aria-live="polite"></div>
+    </div>
+
+    <!-- CATEGORY (shared) -->
+    <div class="category-bar" role="group" aria-label="Choose word category" id="category-bar">
+      <button class="cat-btn active" id="cat-all"      onclick="setCategory('all')"     aria-pressed="true">All Words</button>
+      <button class="cat-btn"        id="cat-custom"   onclick="setCategory('custom')"  aria-pressed="false">My Words</button>
+      <button class="cat-btn"        id="cat-nature"   onclick="setCategory('nature')"  aria-pressed="false">Nature</button>
+      <button class="cat-btn"        id="cat-people"   onclick="setCategory('people')"  aria-pressed="false">People</button>
+      <button class="cat-btn"        id="cat-actions"  onclick="setCategory('actions')" aria-pressed="false">Actions</button>
       <button class="cat-btn"        id="cat-feelings" onclick="setCategory('feelings')" aria-pressed="false">Feelings</button>
     </div>
 
-    <!-- SCORE -->
-    <div class="score-bar" role="status" aria-live="polite" aria-label="Game stats">
-      <div class="score-pill">Score: <span id="score-val">0</span></div>
-      <div class="score-pill">Question: <span id="q-num">1</span> / <span id="q-total">10</span></div>
-    </div>
-    <div class="streak-row" aria-live="polite" id="streak-row"></div>
+    <!-- ═══ QUIZ MODE ═══ -->
+    <div id="quiz-mode-area">
+      <div class="score-bar" role="status" aria-live="polite" aria-label="Game stats">
+        <div class="score-pill">Score: <span id="score-val">0</span></div>
+        <div class="score-pill">Question: <span id="q-num">1</span> / <span id="q-total">10</span></div>
+      </div>
+      <div class="streak-row" aria-live="polite" id="streak-row"></div>
 
-    <!-- PROGRESS -->
-    <div class="progress-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progress through questions" id="prog-wrap">
-      <div class="progress-fill" id="prog-fill" style="width:0%"></div>
-    </div>
-
-    <!-- WORD CARD -->
-    <div id="game-area">
-      <div class="word-card" id="word-card">
-        <span class="word-category" id="word-cat"></span>
-        <div class="word-display" id="word-display" aria-label="Word to define"></div>
-        <div class="word-pos" id="word-pos"></div>
-        <div class="word-pronunciation" id="word-pron"></div>
+      <div class="progress-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progress through questions" id="prog-wrap">
+        <div class="progress-fill" id="prog-fill" style="width:0%"></div>
       </div>
 
-      <div class="choices-grid" id="choices-grid" role="group" aria-label="Answer choices"></div>
+      <div id="game-area">
+        <div class="word-card" id="word-card">
+          <span class="word-category" id="word-cat"></span>
+          <div class="word-display" id="word-display" aria-label="Word to define"></div>
+          <div class="word-pos" id="word-pos"></div>
+          <div class="word-pronunciation" id="word-pron"></div>
+        </div>
 
-      <div class="feedback-area" id="feedback-area" role="alert" aria-live="assertive">
-        <span id="feedback-text"></span>
-        <p class="example" id="feedback-example"></p>
+        <div class="choices-grid" id="choices-grid" role="group" aria-label="Answer choices"></div>
+
+        <div class="feedback-area" id="feedback-area" role="alert" aria-live="assertive">
+          <span id="feedback-text"></span>
+          <p class="example" id="feedback-example"></p>
+        </div>
+
+        <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next Word →</button>
       </div>
 
-      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next Word →</button>
+      <div class="summary-panel" id="summary-panel" role="status" aria-live="polite">
+        <div class="trophy" aria-hidden="true">🏆</div>
+        <h2 id="sum-title">Round complete!</h2>
+        <p class="sub" id="sum-sub"></p>
+        <div class="summary-stats">
+          <div class="sum-stat"><div class="val" id="sum-score">0</div><div class="lbl">Correct</div></div>
+          <div class="sum-stat"><div class="val" id="sum-wrong">0</div><div class="lbl">Missed</div></div>
+          <div class="sum-stat"><div class="val" id="sum-pct">0%</div><div class="lbl">Accuracy</div></div>
+          <div class="sum-stat"><div class="val" id="sum-streak">0</div><div class="lbl">Best streak</div></div>
+        </div>
+        <div class="missed-section" id="missed-section" aria-label="Words to review"></div>
+        <button class="restart-btn" onclick="startGame()">Play Again 🔄</button>
+        <button class="summary-btn secondary" onclick="switchMode('flash')" style="margin-top:8px;">Study as Flashcards 🃏</button>
+      </div>
     </div>
 
-    <!-- SUMMARY -->
-    <div class="summary-panel" id="summary-panel" role="status" aria-live="polite">
-      <div class="trophy" aria-hidden="true">🏆</div>
-      <h2 id="sum-title">Round complete!</h2>
-      <p class="sub" id="sum-sub"></p>
-      <div class="summary-stats">
-        <div class="sum-stat"><div class="val" id="sum-score">0</div><div class="lbl">Correct</div></div>
-        <div class="sum-stat"><div class="val" id="sum-wrong">0</div><div class="lbl">Missed</div></div>
-        <div class="sum-stat"><div class="val" id="sum-pct">0%</div><div class="lbl">Accuracy</div></div>
-        <div class="sum-stat"><div class="val" id="sum-streak">0</div><div class="lbl">Best streak</div></div>
+    <!-- ═══ FLASHCARD MODE ═══ -->
+    <div id="flashcard-area">
+      <p class="fc-meta" id="fc-meta" aria-live="polite">Card 1 of 1</p>
+
+      <div class="fc-progress-row" id="fc-dots" aria-hidden="true"></div>
+
+      <!-- The card -->
+      <div class="flashcard-wrap" onclick="flipCard()" role="button" tabindex="0"
+           aria-label="Flashcard — press Space or Enter to flip"
+           onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();flipCard()}">
+        <div class="flashcard" id="flashcard">
+          <!-- front -->
+          <div class="fc-face fc-front">
+            <span class="word-category" id="fc-cat" style="margin-bottom:1rem;"></span>
+            <p class="fc-hint">Tap to reveal definition</p>
+            <div class="fc-word" id="fc-word"></div>
+            <div class="fc-pos" id="fc-pos"></div>
+            <div class="fc-pron" id="fc-pron"></div>
+          </div>
+          <!-- back -->
+          <div class="fc-face fc-back">
+            <p class="fc-hint">Definition</p>
+            <div class="fc-def" id="fc-def"></div>
+            <div class="fc-example" id="fc-example"></div>
+          </div>
+        </div>
       </div>
-      <div class="missed-section" id="missed-section" aria-label="Words to review"></div>
-      <button class="restart-btn" onclick="startGame()">Play Again 🔄</button>
+
+      <div class="fc-controls">
+        <button class="fc-btn" onclick="fcNav(-1)" id="fc-prev" aria-label="Previous card">← Prev</button>
+        <button class="fc-btn primary" onclick="flipCard()" id="fc-flip">Flip Card</button>
+        <button class="fc-btn" onclick="fcNav(1)"  id="fc-next" aria-label="Next card">Next →</button>
+      </div>
+
+      <div style="text-align:center; margin-bottom:1rem;">
+        <button class="fc-btn" style="max-width:240px; margin:0 auto;" onclick="shuffleFlash()">🔀 Shuffle</button>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="summary-btn secondary" style="display:inline-block;width:auto;padding:10px 24px;" onclick="switchMode('quiz')">Switch to Quiz 🧠</button>
+      </div>
     </div>
+
   </main>
 
   <script>
-    const ALL_WORDS = [
+    /* ═══════════════════════════════════════════════
+       WORD DATA
+    ═══════════════════════════════════════════════ */
+    const BUILT_IN = [
       // Nature
-      { word: 'Verdant',    pos: 'adjective', pron: '/ˈvɜːr.dənt/',  cat: 'nature',   def: 'Lush green with plants and vegetation', example: 'The verdant hillside was covered in wildflowers.',
+      { word: 'Verdant',    pos: 'adjective', pron: '/ˈvɜːr.dənt/',   cat: 'nature',   def: 'Lush green with plants and vegetation', example: 'The verdant hillside was covered in wildflowers.',
         wrong: ['Dry and barren', 'Rocky and steep', 'Cold and icy'] },
       { word: 'Riparian',   pos: 'adjective', pron: '/rɪˈpɛər.i.ən/', cat: 'nature',   def: 'Relating to land beside a river or stream', example: 'Riparian zones are home to diverse wildlife.',
         wrong: ['Found deep underground', 'Relating to ocean life', 'Existing in desert regions'] },
@@ -439,42 +786,68 @@
         wrong: ['Lasting forever', 'Growing underground', 'Very loud and harsh'] },
       { word: 'Solstice',   pos: 'noun',      pron: '/ˈsɒl.stɪs/',    cat: 'nature',   def: 'The time when the sun is at its highest or lowest point', example: 'The summer solstice is the longest day of the year.',
         wrong: ['A type of storm', 'The path of a river', 'A rare mineral'] },
-
       // People
-      { word: 'Altruistic', pos: 'adjective', pron: '/ˌæl.truˈɪs.tɪk/', cat: 'people',  def: 'Selflessly caring about others\' wellbeing', example: 'Her altruistic nature led her to volunteer daily.',
+      { word: 'Altruistic', pos: 'adjective', pron: '/ˌæl.truˈɪs.tɪk/', cat: 'people', def: "Selflessly caring about others' wellbeing", example: 'Her altruistic nature led her to volunteer daily.',
         wrong: ['Focused only on oneself', 'Very competitive', 'Easily angered'] },
-      { word: 'Eloquent',   pos: 'adjective', pron: '/ˈɛl.ə.kwənt/',    cat: 'people',  def: 'Fluent and persuasive in speaking or writing', example: 'The eloquent speaker moved the crowd to tears.',
+      { word: 'Eloquent',   pos: 'adjective', pron: '/ˈɛl.ə.kwənt/',    cat: 'people', def: 'Fluent and persuasive in speaking or writing', example: 'The eloquent speaker moved the crowd to tears.',
         wrong: ['Quiet and reserved', 'Rude and blunt', 'Confused and unclear'] },
-      { word: 'Tenacious',  pos: 'adjective', pron: '/tɪˈneɪ.ʃəs/',     cat: 'people',  def: 'Holding firmly to a goal despite difficulty', example: 'A tenacious student who practiced every single day.',
+      { word: 'Tenacious',  pos: 'adjective', pron: '/tɪˈneɪ.ʃəs/',     cat: 'people', def: 'Holding firmly to a goal despite difficulty', example: 'A tenacious student who practiced every single day.',
         wrong: ['Easily giving up', 'Loud and boisterous', 'Quick to change plans'] },
-      { word: 'Empathetic', pos: 'adjective', pron: '/ˌɛm.pəˈθɛt.ɪk/',  cat: 'people',  def: 'Able to understand and share others\' feelings', example: 'An empathetic teacher who listened to every student.',
+      { word: 'Empathetic', pos: 'adjective', pron: '/ˌɛm.pəˈθɛt.ɪk/', cat: 'people', def: "Able to understand and share others' feelings", example: 'An empathetic teacher who listened to every student.',
         wrong: ['Unaware of others', 'Very competitive', 'Cold and calculating'] },
-
       // Actions
-      { word: 'Ponder',     pos: 'verb',      pron: '/ˈpɒn.dər/',    cat: 'actions',  def: 'To think deeply and carefully about something', example: 'She sat quietly to ponder her next move.',
+      { word: 'Ponder',    pos: 'verb', pron: '/ˈpɒn.dər/',    cat: 'actions', def: 'To think deeply and carefully about something', example: 'She sat quietly to ponder her next move.',
         wrong: ['To rush without thinking', 'To shout loudly', 'To move very fast'] },
-      { word: 'Meander',    pos: 'verb',      pron: '/miˈæn.dər/',   cat: 'actions',  def: 'To wander slowly without a fixed direction', example: 'We meandered through the park on a lazy afternoon.',
+      { word: 'Meander',   pos: 'verb', pron: '/miˈæn.dər/',   cat: 'actions', def: 'To wander slowly without a fixed direction', example: 'We meandered through the park on a lazy afternoon.',
         wrong: ['To run at full speed', 'To climb steeply upward', 'To dig underground'] },
-      { word: 'Cultivate',  pos: 'verb',      pron: '/ˈkʌl.tɪ.veɪt/', cat: 'actions', def: 'To develop or improve through care and effort', example: 'He worked hard to cultivate meaningful friendships.',
+      { word: 'Cultivate', pos: 'verb', pron: '/ˈkʌl.tɪ.veɪt/', cat: 'actions', def: 'To develop or improve through care and effort', example: 'He worked hard to cultivate meaningful friendships.',
         wrong: ['To destroy or tear down', 'To ignore completely', 'To race ahead quickly'] },
-      { word: 'Flourish',   pos: 'verb',      pron: '/ˈflʌr.ɪʃ/',    cat: 'actions',  def: 'To grow or develop in a healthy and vigorous way', example: 'The community garden began to flourish in spring.',
+      { word: 'Flourish',  pos: 'verb', pron: '/ˈflʌr.ɪʃ/',    cat: 'actions', def: 'To grow or develop in a healthy and vigorous way', example: 'The community garden began to flourish in spring.',
         wrong: ['To wither and fade', 'To move backwards', 'To stay completely still'] },
-
       // Feelings
-      { word: 'Serene',     pos: 'adjective', pron: '/sɪˈriːn/',     cat: 'feelings', def: 'Calm, peaceful, and untroubled', example: 'She felt serene watching the sunset over the lake.',
+      { word: 'Serene',     pos: 'adjective', pron: '/sɪˈriːn/',      cat: 'feelings', def: 'Calm, peaceful, and untroubled', example: 'She felt serene watching the sunset over the lake.',
         wrong: ['Angry and agitated', 'Busy and overwhelmed', 'Loud and restless'] },
-      { word: 'Elated',     pos: 'adjective', pron: '/ɪˈleɪ.tɪd/',   cat: 'feelings', def: 'Extremely happy and excited', example: 'He was elated when he heard the good news.',
+      { word: 'Elated',     pos: 'adjective', pron: '/ɪˈleɪ.tɪd/',    cat: 'feelings', def: 'Extremely happy and excited', example: 'He was elated when he heard the good news.',
         wrong: ['Deeply sad and gloomy', 'Bored and indifferent', 'Tired and sluggish'] },
-      { word: 'Melancholy', pos: 'noun',      pron: '/ˈmɛl.ən.kɒl.i/', cat: 'feelings',def: 'A deep, thoughtful sadness or gloom', example: 'A sense of melancholy settled over the empty park.',
+      { word: 'Melancholy', pos: 'noun',      pron: '/ˈmɛl.ən.kɒl.i/', cat: 'feelings', def: 'A deep, thoughtful sadness or gloom', example: 'A sense of melancholy settled over the empty park.',
         wrong: ['Great joy and energy', 'Intense anger', 'Extreme surprise'] },
       { word: 'Nostalgic',  pos: 'adjective', pron: '/nɒˈstæl.dʒɪk/', cat: 'feelings', def: 'A warm longing for the past', example: 'Hearing that song made her feel deeply nostalgic.',
         wrong: ['Looking only to the future', 'Feeling confused and lost', 'Excited about new things'] },
     ];
 
-    let category = 'all', queue = [], qIdx = 0, score = 0;
-    let streak = 0, bestStreak = 0, answered = false;
-    let missed = [];
+    // Custom words stored in memory
+    let customWords = [];
 
+    function getAllWords() {
+      return [...BUILT_IN, ...customWords];
+    }
+
+    /* ═══════════════════════════════════════════════
+       MODE STATE
+    ═══════════════════════════════════════════════ */
+    let currentMode = 'quiz'; // 'quiz' | 'flash'
+    let category = 'all';
+
+    function switchMode(mode) {
+      currentMode = mode;
+      document.getElementById('tab-quiz').classList.toggle('active', mode === 'quiz');
+      document.getElementById('tab-flash').classList.toggle('active', mode === 'flash');
+      document.getElementById('tab-quiz').setAttribute('aria-selected', mode === 'quiz' ? 'true' : 'false');
+      document.getElementById('tab-flash').setAttribute('aria-selected', mode === 'flash' ? 'true' : 'false');
+      document.getElementById('quiz-mode-area').style.display = mode === 'quiz' ? 'block' : 'none';
+      document.getElementById('flashcard-area').style.display = mode === 'flash' ? 'block' : 'none';
+
+      if (mode === 'quiz') {
+        startGame();
+      } else {
+        startFlash();
+      }
+      announce(mode === 'quiz' ? 'Quiz mode' : 'Flashcard mode');
+    }
+
+    /* ═══════════════════════════════════════════════
+       CATEGORY
+    ═══════════════════════════════════════════════ */
     function setCategory(cat) {
       category = cat;
       document.querySelectorAll('.cat-btn').forEach(b => {
@@ -482,18 +855,32 @@
         b.setAttribute('aria-pressed', 'false');
       });
       const btn = document.getElementById('cat-' + cat);
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed', 'true');
-      startGame();
+      if (btn) { btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); }
+      if (currentMode === 'quiz') startGame();
+      else startFlash();
     }
 
     function getPool() {
-      if (category === 'all') return ALL_WORDS;
-      return ALL_WORDS.filter(w => w.cat === category);
+      const all = getAllWords();
+      if (category === 'all') return all;
+      return all.filter(w => w.cat === category);
     }
+
+    /* ═══════════════════════════════════════════════
+       QUIZ MODE
+    ═══════════════════════════════════════════════ */
+    let queue = [], qIdx = 0, score = 0;
+    let streak = 0, bestStreak = 0, answered = false;
+    let missed = [];
 
     function startGame() {
       const pool = getPool();
+      if (pool.length === 0) {
+        document.getElementById('game-area').style.display = 'none';
+        document.getElementById('summary-panel').classList.remove('show');
+        announce('No words in this category yet. Add some words first!');
+        return;
+      }
       queue = [...pool].sort(() => Math.random() - 0.5).slice(0, Math.min(10, pool.length));
       qIdx = 0; score = 0; streak = 0; bestStreak = 0; missed = [];
       answered = false;
@@ -516,17 +903,23 @@
       document.getElementById('word-card').style.animation = 'none';
       requestAnimationFrame(() => { document.getElementById('word-card').style.animation = ''; });
 
-      document.getElementById('word-cat').textContent     = q.cat.charAt(0).toUpperCase() + q.cat.slice(1);
+      document.getElementById('word-cat').textContent  = q.cat.charAt(0).toUpperCase() + q.cat.slice(1);
       document.getElementById('word-display').textContent = q.word;
-      document.getElementById('word-pos').textContent     = q.pos;
-      document.getElementById('word-pron').textContent    = q.pron;
+      document.getElementById('word-pos').textContent  = q.pos;
+      document.getElementById('word-pron').textContent = q.pron || '';
       document.getElementById('word-display').setAttribute('aria-label', 'Word: ' + q.word + ', ' + q.pos);
 
       document.getElementById('feedback-area').className = 'feedback-area';
-      document.getElementById('feedback-area').textContent = '';
+      document.getElementById('feedback-text').textContent = '';
+      document.getElementById('feedback-example').textContent = '';
       document.getElementById('next-btn').className = 'next-btn';
 
-      const choices = [q.def, ...q.wrong].sort(() => Math.random() - 0.5);
+      // Build wrong options; if fewer than 3 custom wrongs, borrow from other words
+      let wrongPool = q.wrong && q.wrong.length >= 3
+        ? q.wrong
+        : buildWrongOptions(q);
+
+      const choices = [q.def, ...wrongPool.slice(0, 3)].sort(() => Math.random() - 0.5);
       const grid = document.getElementById('choices-grid');
       grid.innerHTML = '';
       choices.forEach((c, i) => {
@@ -539,6 +932,13 @@
       });
 
       announce('Question ' + (qIdx + 1) + ' of ' + queue.length + '. Define the word: ' + q.word + ', ' + q.pos + '.');
+    }
+
+    function buildWrongOptions(targetWord) {
+      // Pull random definitions from other words in the pool
+      const others = getAllWords().filter(w => w.word !== targetWord.word);
+      const shuffled = [...others].sort(() => Math.random() - 0.5);
+      return shuffled.slice(0, 3).map(w => w.def);
     }
 
     function handleChoice(btn, isCorrect, q) {
@@ -555,23 +955,21 @@
 
       if (isCorrect) {
         btn.classList.add('correct');
-        score++;
-        streak++;
-        bestStreak = Math.max(bestStreak, streak);
+        score++; streak++; bestStreak = Math.max(bestStreak, streak);
         document.getElementById('score-val').textContent = score;
         const streakMsg = streak >= 3 ? ' 🔥 ' + streak + ' in a row!' : '';
         document.getElementById('streak-row').innerHTML = streak >= 3 ? '<span class="streak-val">🔥 ' + streak + ' in a row!</span>' : '';
         document.getElementById('feedback-text').textContent = '✅ Correct! ' + q.word + ' means: ' + q.def + '.';
-        document.getElementById('feedback-example').textContent = '"' + q.example + '"';
+        document.getElementById('feedback-example').textContent = q.example ? '"' + q.example + '"' : '';
         fb.className = 'feedback-area show good';
-        announce('Correct! ' + streakMsg);
+        announce('Correct!' + streakMsg);
       } else {
         btn.classList.add('wrong');
         streak = 0;
         document.getElementById('streak-row').textContent = '';
         missed.push(q);
         document.getElementById('feedback-text').textContent = '❌ Not quite. ' + q.word + ' means: ' + q.def + '.';
-        document.getElementById('feedback-example').textContent = '"' + q.example + '"';
+        document.getElementById('feedback-example').textContent = q.example ? '"' + q.example + '"' : '';
         fb.className = 'feedback-area show bad';
         announce('Incorrect. ' + q.word + ' means ' + q.def);
       }
@@ -581,32 +979,21 @@
 
     function nextQuestion() {
       qIdx++;
-      if (qIdx >= queue.length) {
-        showSummary();
-      } else {
-        document.getElementById('q-num').textContent = qIdx + 1;
-        loadQuestion();
-      }
+      if (qIdx >= queue.length) showSummary();
+      else { document.getElementById('q-num').textContent = qIdx + 1; loadQuestion(); }
     }
 
     function showSummary() {
-
-      localStorage.setItem('mb-progress', parseInt(localStorage.getItem('mb-progress') || '0') + 1);
-      document.getElementById('game-area').style.display = 'none';
-    
       document.getElementById('game-area').style.display = 'none';
       const wrong = queue.length - score;
       const pct = Math.round((score / queue.length) * 100);
-
       document.getElementById('sum-score').textContent = score;
       document.getElementById('sum-wrong').textContent = wrong;
       document.getElementById('sum-pct').textContent = pct + '%';
       document.getElementById('sum-streak').textContent = bestStreak;
-
       const titles = pct === 100 ? '🌟 Perfect score!' : pct >= 80 ? '🎉 Excellent!' : pct >= 60 ? '😊 Good job!' : '💪 Keep learning!';
       document.getElementById('sum-title').textContent = titles;
       document.getElementById('sum-sub').textContent = 'You got ' + score + ' out of ' + queue.length + ' correct.';
-
       const missedSec = document.getElementById('missed-section');
       if (missed.length > 0) {
         missedSec.innerHTML = '<h3>Words to review:</h3>';
@@ -619,7 +1006,6 @@
       } else {
         missedSec.innerHTML = '<p style="color:var(--g2); font-weight:700; text-align:center; margin-bottom:1rem;">No mistakes — amazing! 🌿</p>';
       }
-
       document.getElementById('summary-panel').classList.add('show');
       announce('Game over! You scored ' + score + ' out of ' + queue.length + '. ' + titles);
     }
@@ -629,16 +1015,182 @@
       document.getElementById('prog-wrap').setAttribute('aria-valuenow', Math.round(pct));
     }
 
+    /* ═══════════════════════════════════════════════
+       FLASHCARD MODE
+    ═══════════════════════════════════════════════ */
+    let flashDeck = [], fcIdx = 0, fcFlipped = false;
+
+    function startFlash() {
+      const pool = getPool();
+      if (pool.length === 0) {
+        document.getElementById('fc-meta').textContent = 'No words in this category yet. Add some first!';
+        document.getElementById('flashcard').querySelector('.fc-word').textContent = '?';
+        return;
+      }
+      flashDeck = [...pool].sort(() => Math.random() - 0.5);
+      fcIdx = 0;
+      renderFlashCard(false);
+    }
+
+    function renderFlashCard(shouldFlip) {
+      const card = flashDeck[fcIdx];
+      fcFlipped = !!shouldFlip;
+
+      const fc = document.getElementById('flashcard');
+      fc.classList.toggle('flipped', fcFlipped);
+
+      document.getElementById('fc-cat').textContent = card.cat.charAt(0).toUpperCase() + card.cat.slice(1);
+      document.getElementById('fc-word').textContent = card.word;
+      document.getElementById('fc-pos').textContent  = card.pos;
+      document.getElementById('fc-pron').textContent = card.pron || '';
+      document.getElementById('fc-def').textContent  = card.def;
+      document.getElementById('fc-example').textContent = card.example ? '"' + card.example + '"' : '';
+
+      document.getElementById('fc-meta').textContent = 'Card ' + (fcIdx + 1) + ' of ' + flashDeck.length;
+
+      document.getElementById('fc-prev').disabled = fcIdx === 0;
+      document.getElementById('fc-next').disabled = fcIdx === flashDeck.length - 1;
+
+      // Dots
+      const dots = document.getElementById('fc-dots');
+      dots.innerHTML = '';
+      flashDeck.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'fc-dot' + (i < fcIdx ? ' seen' : '') + (i === fcIdx ? ' current' : '');
+        dots.appendChild(d);
+      });
+
+      announce('Card ' + (fcIdx + 1) + ' of ' + flashDeck.length + '. ' + (fcFlipped ? 'Definition: ' + card.def : 'Word: ' + card.word + '. Tap to see definition.'));
+    }
+
+    function flipCard() {
+      fcFlipped = !fcFlipped;
+      document.getElementById('flashcard').classList.toggle('flipped', fcFlipped);
+      const card = flashDeck[fcIdx];
+      announce(fcFlipped ? 'Definition: ' + card.def : 'Word: ' + card.word);
+    }
+
+    function fcNav(dir) {
+      const next = fcIdx + dir;
+      if (next < 0 || next >= flashDeck.length) return;
+      fcIdx = next;
+      renderFlashCard(false);
+    }
+
+    function shuffleFlash() {
+      flashDeck = [...flashDeck].sort(() => Math.random() - 0.5);
+      fcIdx = 0;
+      renderFlashCard(false);
+      announce('Deck shuffled!');
+    }
+
+    /* ═══════════════════════════════════════════════
+       ADD CUSTOM WORD
+    ═══════════════════════════════════════════════ */
+    let addFormOpen = false;
+
+    function toggleAddForm() {
+      addFormOpen = !addFormOpen;
+      const form = document.getElementById('add-word-form');
+      const btn  = document.getElementById('add-toggle-btn');
+      const hdr  = document.getElementById('add-word-header');
+      form.classList.toggle('open', addFormOpen);
+      form.setAttribute('aria-hidden', addFormOpen ? 'false' : 'true');
+      btn.classList.toggle('open', addFormOpen);
+      btn.setAttribute('aria-label', addFormOpen ? 'Collapse add word form' : 'Expand add word form');
+      hdr.setAttribute('aria-expanded', addFormOpen ? 'true' : 'false');
+      if (addFormOpen) document.getElementById('inp-word').focus();
+    }
+
+    function addCustomWord() {
+      const errEl = document.getElementById('form-error');
+      const okEl  = document.getElementById('form-success');
+      errEl.className = 'form-error';
+      okEl.className  = 'form-success';
+
+      const word = document.getElementById('inp-word').value.trim();
+      const def  = document.getElementById('inp-def').value.trim();
+      const pos  = document.getElementById('inp-pos').value;
+      const pron = document.getElementById('inp-pron').value.trim();
+      const cat  = document.getElementById('inp-cat').value;
+      const ex   = document.getElementById('inp-example').value.trim();
+      const wrongRaw = document.getElementById('inp-wrong').value.trim();
+
+      if (!word) { showFormError('Please enter a word.'); return; }
+      if (!def)  { showFormError('Please enter a definition.'); return; }
+      if (getAllWords().some(w => w.word.toLowerCase() === word.toLowerCase())) {
+        showFormError('"' + word + '" is already in the deck!');
+        return;
+      }
+
+      const wrong = wrongRaw
+        ? wrongRaw.split(';').map(s => s.trim()).filter(Boolean)
+        : buildWrongOptions({ word });
+
+      const newEntry = { word, pos, pron, cat, def, example: ex, wrong, isCustom: true };
+      customWords.push(newEntry);
+
+      // Clear form
+      ['inp-word','inp-pron','inp-def','inp-example','inp-wrong'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+
+      okEl.textContent = '✅ "' + word + '" added to your deck!';
+      okEl.className = 'form-success show';
+      setTimeout(() => { okEl.className = 'form-success'; }, 3000);
+
+      renderCustomChips();
+      // Update the "My Words" category button visibility
+      document.getElementById('cat-custom').style.display = 'inline-block';
+      // Reload the active mode so the new word is included
+      if (currentMode === 'quiz') startGame();
+      else startFlash();
+      announce('"' + word + '" added to your deck.');
+    }
+
+    function showFormError(msg) {
+      const el = document.getElementById('form-error');
+      el.textContent = msg;
+      el.className = 'form-error show';
+    }
+
+    function removeCustomWord(word) {
+      customWords = customWords.filter(w => w.word !== word);
+      renderCustomChips();
+      if (currentMode === 'quiz') startGame();
+      else startFlash();
+      announce('"' + word + '" removed from your deck.');
+    }
+
+    function renderCustomChips() {
+      const el = document.getElementById('custom-words-list');
+      if (customWords.length === 0) { el.innerHTML = ''; return; }
+      el.innerHTML = '<h3>Your words (' + customWords.length + '):</h3>';
+      customWords.forEach(w => {
+        const chip = document.createElement('span');
+        chip.className = 'custom-word-chip';
+        chip.innerHTML = w.word + ' <button class="remove-chip-btn" aria-label="Remove ' + w.word + '" onclick="removeCustomWord(\'' + w.word.replace(/'/g, "\\'") + '\')">✕</button>';
+        el.appendChild(chip);
+      });
+    }
+
+    /* ═══════════════════════════════════════════════
+       SCREEN READER
+    ═══════════════════════════════════════════════ */
     function announce(msg) {
       const el = document.getElementById('sr-announce');
       el.textContent = '';
       requestAnimationFrame(() => { el.textContent = msg; });
     }
 
-    // Start on load
-    startGame();
+    /* ═══════════════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════════════ */
+    // Hide the My Words category button initially (no custom words yet)
+    document.getElementById('cat-custom').style.display = 'none';
+    // Start in quiz mode
+    switchMode('quiz');
   </script>
 
-<script src="accessibility.js"></script>
 </body>
 </html>
