@@ -5,26 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MindBloom </title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <!--
-    Font choices:
-    • Atkinson Hyperlegible — body & UI text
-      Designed by the Braille Institute specifically for readers with low vision
-      and dyslexia. Each character has highly distinct shapes so similar-looking
-      letters (b/d, p/q, i/l/1) are easy to tell apart.
-    • Fraunces — display/headings only (large sizes, so fine for dyslexic readers)
-  -->
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
   <style>
-    /* ─────────────────────────────────────────
-       DESIGN TOKENS
-       All text colours verified WCAG AA (≥4.5:1)
-       --forest on --paper    = 9.1:1  ✓
-       --forest on --sage-bg  = 8.4:1  ✓
-       --body-text on --paper = 7.2:1  ✓
-       --muted on --paper     = 4.9:1  ✓
-       white on --forest      = 9.1:1  ✓
-       white on --canopy      = 5.8:1  ✓
-    ───────────────────────────────────────── */
     :root {
       --forest:    #14350a;
       --canopy:    #1f5212;
@@ -41,15 +23,13 @@
       --focus:     #0057b8;
       --focus-bg:  #e8f0fe;
 
-      /* Dyslexia-friendly typography settings */
       --body-font: 'Atkinson Hyperlegible', sans-serif;
       --display-font: 'Fraunces', serif;
-      --line-height-body: 1.85;   /* extra line height aids tracking */
-      --letter-spacing-body: 0.01em; /* slight spacing helps letter distinction */
-      --word-spacing: 0.05em;     /* slightly more space between words */
+      --line-height-body: 1.85;
+      --letter-spacing-body: 0.01em;
+      --word-spacing: 0.05em;
     }
 
-    /* ── RESET & BASE ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; font-size: 18px; }
     body {
@@ -62,7 +42,6 @@
       overflow-x: hidden;
     }
 
-    /* ── ACCESSIBILITY: SKIP LINK ── */
     .skip-link {
       position: absolute; top: -200px; left: 1.25rem;
       background: var(--focus); color: #fff;
@@ -74,14 +53,8 @@
     }
     .skip-link:focus { top: 1rem; }
 
-    /* ── ACCESSIBILITY: FOCUS RING ── */
-    :focus-visible {
-      outline: 3px solid var(--focus);
-      outline-offset: 4px;
-      border-radius: 6px;
-    }
+    :focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; border-radius: 6px; }
 
-    /* ── HEADER ── */
     header {
       background: var(--forest);
       position: sticky; top: 0; z-index: 200;
@@ -114,426 +87,107 @@
     .logo-name span { color: var(--mint); }
     .logo:focus-visible { outline: 3px solid var(--mint); outline-offset: 3px; border-radius: 8px; }
 
-    nav ul { display: flex; align-items: center; gap: 4px; list-style: none; flex-wrap: wrap; }
-    nav a {
-      color: #c8e8b0; font-size: 1rem; font-weight: 700;
-      text-decoration: none; padding: 10px 16px; border-radius: 8px;
-      transition: background 0.15s, color 0.15s; white-space: nowrap;
-      font-family: var(--body-font);
+    nav ul { display: flex; align-items: center; gap: 15px; list-style: none; flex-wrap: wrap; }
+    
+    /* Login Modal Styles */
+    #login-modal {
+      display: none; position: fixed; inset: 0; 
+      background: rgba(20, 53, 10, 0.85); z-index: 9999; 
+      align-items: center; justify-content: center; 
+      backdrop-filter: blur(4px);
     }
-    nav a:hover { background: rgba(255,255,255,0.1); color: #fff; }
-    nav a:focus-visible { outline: 3px solid var(--mint); outline-offset: 2px; }
-    .nav-cta {
-      background: var(--sage) !important; color: var(--forest) !important;
-      font-weight: 800 !important; margin-left: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    .login-box {
+      background: var(--paper); padding: 3rem; border-radius: 24px; 
+      text-align: center; max-width: 400px; width: 90%; 
+      border: 2px solid var(--sage);
     }
-    .nav-cta:hover { background: var(--mint) !important; }
-
-    /* ── HERO ── */
-    .hero {
-      background: var(--forest);
-      position: relative; overflow: hidden;
-      padding: 0;
+    .login-box h2 { font-family: var(--display-font); color: var(--forest); margin-bottom: 1rem; }
+    .login-box p { margin-bottom: 1.5rem; color: var(--muted); }
+    .login-box input {
+      width: 100%; padding: 12px; border: 2px solid var(--sage); 
+      border-radius: 8px; margin-bottom: 1.5rem; 
     }
-    .hero-wave {
-      position: absolute; bottom: -2px; left: 0; right: 0;
-      line-height: 0; z-index: 3;
-    }
-    .hero-wave svg { display: block; width: 100%; }
-
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0; z-index: 0;
-      background-image:
-        radial-gradient(circle at 15% 85%, rgba(61,158,32,0.18) 0%, transparent 40%),
-        radial-gradient(circle at 85% 15%, rgba(107,191,62,0.12) 0%, transparent 45%),
-        radial-gradient(circle at 50% 50%, rgba(31,82,18,0.4) 0%, transparent 70%);
-    }
-
-    .hero-inner {
-      max-width: 1160px; margin: 0 auto;
-      padding: 5rem 2rem 8rem;
-      display: grid;
-      grid-template-columns: 1.05fr 1fr;
-      gap: 4rem; align-items: center;
-      position: relative; z-index: 2;
-    }
-
-    .hero-kicker {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(168,219,136,0.18);
-      border: 1.5px solid rgba(168,219,136,0.4);
-      color: var(--mint);
-      font-size: 0.85rem; font-weight: 700;
-      padding: 6px 14px; border-radius: 30px;
-      margin-bottom: 1.5rem;
-      letter-spacing: 0.5px;
-      font-family: var(--body-font);
-    }
-    .hero-kicker .dot {
-      width: 7px; height: 7px; background: var(--sage);
-      border-radius: 50%; animation: pulse 2s ease infinite;
-    }
-    @keyframes pulse {
-      0%,100% { opacity:1; transform:scale(1); }
-      50%      { opacity:0.5; transform:scale(1.4); }
-    }
-
-    .hero-title {
-      font-family: var(--display-font);
-      font-size: clamp(2.4rem, 5vw, 4rem);
-      font-weight: 900; line-height: 1.1;
-      color: #fff; letter-spacing: -1.5px;
-      margin-bottom: 1.5rem;
-    }
-    .hero-title .green-word {
-      color: var(--mint);
-      font-style: italic;
-      display: inline-block;
-      position: relative;
-    }
-    .hero-title .green-word::after {
-      content: '';
-      position: absolute; bottom: 2px; left: 0; right: 0;
-      height: 4px; background: var(--sage);
-      border-radius: 2px; opacity: 0.6;
-    }
-
-    .hero-desc {
-      font-size: 1.15rem; font-weight: 400;
-      color: rgba(255,255,255,0.88);
-      line-height: 1.9; max-width: 500px;
-      margin-bottom: 2.5rem;
-      font-family: var(--body-font);
-    }
-
-    .hero-btns {
-      display: flex; gap: 1rem; flex-wrap: wrap;
-      margin-bottom: 2.5rem;
-    }
-    .btn-hero-primary {
-      display: inline-flex; align-items: center; gap: 10px;
+    .login-btn {
       background: var(--sage); color: var(--forest);
       font-size: 1.05rem; font-weight: 700;
       padding: 16px 32px; border-radius: 50px;
-      text-decoration: none;
-      box-shadow: 0 4px 20px rgba(107,191,62,0.4);
-      transition: background 0.15s, transform 0.12s, box-shadow 0.15s;
-      min-height: 56px;
-      font-family: var(--body-font);
+      width: 100%; transition: background 0.15s; font-family: var(--body-font);
     }
-    .btn-hero-primary:hover {
-      background: var(--mint); transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(107,191,62,0.5);
-    }
-    .btn-hero-primary:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+    .login-btn:hover { background: var(--mint); }
 
-    .btn-hero-ghost {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: rgba(255,255,255,0.1);
-      border: 2px solid rgba(255,255,255,0.35);
-      color: #fff;
-      font-size: 1.05rem; font-weight: 700;
-      padding: 16px 28px; border-radius: 50px;
-      text-decoration: none;
-      transition: background 0.15s, border-color 0.15s;
-      min-height: 56px;
-      font-family: var(--body-font);
+    /* Hero */
+    .hero { background: var(--forest); position: relative; overflow: hidden; padding: 0; }
+    .hero-inner {
+      max-width: 1160px; margin: 0 auto; padding: 5rem 2rem 1rem;
+      display: grid; grid-template-columns: 1.05fr 1fr;
+      gap: 4rem; align-items: center; position: relative; z-index: 2;
     }
-    .btn-hero-ghost:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.6); }
-    .btn-hero-ghost:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
-
-    /* Trust chips */
-    .hero-chips {
-      display: flex; flex-wrap: wrap; gap: 10px;
-      list-style: none;
+    .hero-title {
+      font-family: var(--display-font); font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 900; line-height: 1.1; color: #fff; letter-spacing: -1.5px;
+      margin-bottom: 1.5rem;
     }
-    .chip {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(255,255,255,0.09);
-      border: 1.5px solid rgba(255,255,255,0.18);
-      color: #c8e8b0;
-      font-size: 0.9rem; font-weight: 700;
-      padding: 7px 15px; border-radius: 30px;
-      font-family: var(--body-font);
-    }
-    .chip-tick { color: var(--sage); font-size: 1rem; }
-
-    /* Hero illustration panel */
-    .hero-visual {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 1.5rem;
-    }
-    .hero-plant-card {
-      background: rgba(255,255,255,0.08);
-      border: 1.5px solid rgba(168,219,136,0.3);
-      border-radius: 28px;
-      padding: 2.5rem 2rem;
-      text-align: center;
-      width: 100%; max-width: 340px;
-      backdrop-filter: blur(4px);
-    }
-    .hero-plant-card svg { width: 180px; height: 180px; margin: 0 auto 1.25rem; display: block; }
-    .plant-caption {
-      font-family: var(--display-font);
-      font-style: italic;
-      font-size: 1.15rem; font-weight: 700;
-      color: var(--mint); line-height: 1.5;
+    .hero-desc {
+      font-size: 1.15rem; font-weight: 400; color: rgba(255,255,255,0.88);
+      line-height: 1.9; max-width: 500px; margin-bottom: 2.5rem; font-family: var(--body-font);
     }
 
-    /* Floating stat cards */
-    .hero-stats {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 10px; width: 100%; max-width: 340px;
-    }
-    .stat-card {
-      background: rgba(255,255,255,0.1);
-      border: 1.5px solid rgba(168,219,136,0.2);
-      border-radius: 16px; padding: 1rem 1.25rem;
-      text-align: center;
-    }
-    .stat-num {
-      font-family: var(--display-font);
-      font-size: 1.8rem; font-weight: 900;
-      color: var(--mint); line-height: 1;
-      display: block; margin-bottom: 4px;
-    }
-    .stat-lbl {
-      font-size: 0.8rem; font-weight: 700;
-      color: rgba(255,255,255,0.65);
-      letter-spacing: 0.3px;
-      font-family: var(--body-font);
-    }
-
-    /* ── SECTION SHARED ── */
+    /* Sections */
     .section-pad { padding: 5.5rem 2rem; }
     .section-center { max-width: 1160px; margin: 0 auto; }
-
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 0.82rem; font-weight: 700;
-      color: var(--fern);
-      background: var(--sage-bg);
-      border: 1.5px solid #b8dba0;
-      padding: 5px 14px; border-radius: 20px;
-      letter-spacing: 0.8px; text-transform: uppercase;
-      margin-bottom: 1rem;
-      font-family: var(--body-font);
-    }
-
     .section-title {
-      font-family: var(--display-font);
-      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      font-weight: 900; line-height: 1.15;
-      color: var(--forest); letter-spacing: -0.8px;
+      font-family: var(--display-font); font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900; line-height: 1.15; color: var(--forest); letter-spacing: -0.8px;
       margin-bottom: 0.75rem;
     }
     .section-title em { font-style: italic; color: var(--fern); }
-
     .section-sub {
-      font-size: 1.05rem; font-weight: 400;
-      color: var(--muted); line-height: 1.9;
-      max-width: 560px; margin-bottom: 3rem;
-      font-family: var(--body-font);
+      font-size: 1.05rem; font-weight: 400; color: var(--muted); line-height: 1.9;
+      max-width: 560px; margin-bottom: 3rem; font-family: var(--body-font);
     }
 
-    /* ── GAMES ── */
+    /* Games */
     .games-bg { background: var(--sage-bg); }
-
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.75rem;
-    }
-
+    .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.75rem; }
     .game-card {
-      background: #fff;
-      border: 2.5px solid #c8e4b4;
-      border-radius: 24px;
-      padding: 2.25rem;
-      text-decoration: none; color: inherit;
+      background: #fff; border: 2.5px solid #c8e4b4; border-radius: 24px;
+      padding: 2.25rem; text-decoration: none; color: inherit;
       display: flex; flex-direction: column; gap: 1rem;
-      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-      position: relative; overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s; position: relative;
     }
-    .game-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 5px;
-      background: linear-gradient(90deg, var(--leaf), var(--sage));
-      opacity: 0; transition: opacity 0.2s;
-    }
-    .game-card:hover {
-      border-color: var(--leaf);
-      box-shadow: 0 12px 40px rgba(20,53,10,0.14);
-      transform: translateY(-4px);
-    }
-    .game-card:hover::before { opacity: 1; }
-    .game-card:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
-
-
-
+    .game-card:hover { border-color: var(--leaf); transform: translateY(-4px); }
     .card-tag {
-      display: inline-block;
-      font-size: 0.75rem; font-weight: 700;
-      color: var(--fern);
-      background: var(--sage-bg);
-      border: 1.5px solid #b8dba0;
-      padding: 3px 10px; border-radius: 6px;
-      letter-spacing: 0.3px; text-transform: uppercase;
-      width: fit-content;
-      font-family: var(--body-font);
+      display: inline-block; font-size: 0.75rem; font-weight: 700; color: var(--fern);
+      background: var(--sage-bg); border: 1.5px solid #b8dba0;
+      padding: 3px 10px; border-radius: 6px; text-transform: uppercase; width: fit-content;
     }
-
-    .card-title {
-      font-family: var(--display-font);
-      font-size: 1.4rem; font-weight: 700;
-      color: var(--forest); line-height: 1.2;
-      letter-spacing: -0.3px;
-    }
-
-    .card-desc {
-      font-size: 1rem; font-weight: 400;
-      color: var(--muted); line-height: 1.85; flex: 1;
-      font-family: var(--body-font);
-    }
-
+    .card-title { font-family: var(--display-font); font-size: 1.4rem; font-weight: 700; color: var(--forest); }
+    .card-desc { font-size: 1rem; color: var(--muted); flex: 1; }
     .card-cta {
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--forest); color: #fff;
-      font-size: 0.95rem; font-weight: 700;
-      padding: 12px 22px; border-radius: 30px;
-      text-decoration: none; width: fit-content;
-      margin-top: 0.5rem;
-      transition: background 0.15s, transform 0.1s;
-      min-height: 48px;
-      font-family: var(--body-font);
-    }
-    .card-cta:hover { background: var(--canopy); transform: translateX(2px); }
-
-    /* ── CTA BANNER ── */
-    .cta-band {
-      background: linear-gradient(135deg, var(--canopy) 0%, var(--fern) 100%);
-      position: relative; overflow: hidden;
-      padding: 5rem 2rem;
-    }
-    .cta-band::before {
-      content: '';
-      position: absolute; inset: 0;
-      background-image:
-        radial-gradient(circle at 10% 90%, rgba(107,191,62,0.2) 0%, transparent 50%),
-        radial-gradient(circle at 90% 10%, rgba(168,219,136,0.15) 0%, transparent 50%);
-    }
-    .cta-inner {
-      max-width: 1160px; margin: 0 auto;
-      position: relative; z-index: 1;
-      display: flex; align-items: center;
-      justify-content: space-between;
-      gap: 2.5rem; flex-wrap: wrap;
-    }
-    .cta-inner h2 {
-      font-family: var(--display-font);
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-      font-weight: 900; color: #fff;
-      letter-spacing: -0.5px; margin-bottom: 0.5rem;
-    }
-    .cta-inner p {
-      font-size: 1.05rem; font-weight: 400;
-      color: rgba(255,255,255,0.82); max-width: 480px;
-      line-height: 1.9;
-      font-family: var(--body-font);
-    }
-    .cta-btn {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: #fff; color: var(--forest);
-      font-size: 1.05rem; font-weight: 700;
-      padding: 18px 36px; border-radius: 50px;
-      text-decoration: none; flex-shrink: 0;
-      min-height: 60px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.2);
-      transition: background 0.15s, transform 0.12s;
-      font-family: var(--body-font);
-    }
-    .cta-btn:hover { background: var(--sage-bg); transform: translateY(-2px); }
-    .cta-btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--forest);
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding: 2.5rem 2rem;
-    }
-    .footer-inner {
-      max-width: 1160px; margin: 0 auto;
-      display: flex; align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap; gap: 1.5rem;
-    }
-    .footer-logo {
-      font-family: var(--display-font);
-      font-size: 1.25rem; font-weight: 900;
-      color: var(--mint); letter-spacing: -0.3px;
-    }
-    .footer-note {
-      font-size: 0.9rem; font-weight: 400;
-      color: rgba(255,255,255,0.38);
-      font-family: var(--body-font);
-    }
-    .footer-nav { display: flex; gap: 1.5rem; flex-wrap: wrap; list-style: none; }
-    .footer-nav a {
-      font-size: 0.9rem; font-weight: 700;
-      color: rgba(255,255,255,0.48); text-decoration: none;
-      padding: 4px 2px;
-      transition: color 0.15s;
-      font-family: var(--body-font);
-    }
-    .footer-nav a:hover { color: var(--mint); }
-    .footer-nav a:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
-
-    /* ── ANIMATIONS ── */
-    @keyframes floatUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .hero-kicker  { animation: floatUp 0.55s 0.05s ease both; }
-    .hero-title   { animation: floatUp 0.55s 0.15s ease both; }
-    .hero-desc    { animation: floatUp 0.55s 0.25s ease both; }
-    .hero-btns    { animation: floatUp 0.55s 0.35s ease both; }
-    .hero-chips   { animation: floatUp 0.55s 0.45s ease both; }
-    .hero-visual  { animation: floatUp 0.65s 0.3s  ease both; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 940px) {
-      .hero-inner  { grid-template-columns: 1fr; padding-bottom: 6rem; }
-      .hero-visual { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-      .hero-plant-card { max-width: 100%; }
-      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
-    }
-    @media (max-width: 600px) {
-      html { font-size: 17px; }
-      .header-inner { padding: 0 1.25rem; }
-      .section-pad  { padding: 4rem 1.25rem; }
-      .cta-band     { padding: 3.5rem 1.25rem; }
-      footer        { padding: 2rem 1.25rem; }
-      nav a         { padding: 8px 12px; font-size: 0.9rem; }
-      .hero-visual  { grid-template-columns: 1fr; }
-      .hero-stats   { display: none; }
+      background: var(--forest); color: #fff; font-size: 0.95rem; font-weight: 700;
+      padding: 12px 22px; border-radius: 30px; margin-top: 0.5rem; width: fit-content;
     }
 
-    /* ── REDUCED MOTION ── */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { transition: none !important; animation: none !important; }
-      html { scroll-behavior: auto; }
-      .chip .dot { animation: none; }
-    }
+    /* Footer */
+    footer { background: var(--forest); border-top: 1px solid rgba(255,255,255,0.06); padding: 2.5rem 2rem; }
+    .footer-inner { max-width: 1160px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { font-family: var(--display-font); font-size: 1.25rem; font-weight: 900; color: var(--mint); }
   </style>
 </head>
 <body>
 
   <a class="skip-link" href="#games">Skip to games</a>
 
-  <!-- ══ HEADER ══ -->
+  <div id="login-modal">
+    <div class="login-box">
+      <h2>Welcome to MindBloom</h2>
+      <p>Please login to access your games.</p>
+      <input type="text" id="username-input" placeholder="Your name..." />
+      <button onclick="login()" class="login-btn">Login</button>
+    </div>
+  </div>
+
   <header role="banner">
     <div class="header-inner">
       <a href="index.html" class="logo" aria-label="MindBloom — go to home page">
@@ -541,60 +195,84 @@
         <span class="logo-name">Mind<span>Bloom</span></span>
       </a>
       <nav aria-label="Main navigation">
-     
+        <ul id="user-nav">
+          <li style="color: #fff; font-weight: bold;">Hello, <span id="display-name" style="color: var(--mint);"></span>!</li>
+          <li><button onclick="logout()" style="background:transparent; border:1px solid rgba(255,255,255,0.4); color:white; padding:6px 12px; border-radius:6px; cursor:pointer; font-family: var(--body-font);">Logout</button></li>
+        </ul>
       </nav>
     </div>
   </header>
 
-  <!-- ══ GAMES ══ -->
-  <section id="games" class="games-bg section-pad" aria-labelledby="games-heading">
-    <div class="section-center">
-      <!-- <span class="eyebrow" aria-hidden="true"> The games</span> -->
-      <h2 class="section-title" id="games-heading">Pick your <em>exercise</em></h2>
-      <p class="section-sub">Three games, each working a different part of your memory. All free, no timers — take as long as you need.</p>
-
-      <div class="games-grid" role="list">
-
-        <a href="memory-match.html" class="game-card" role="listitem"
-           aria-label="Memory Match — flip cards to find matching pairs. Visual memory game.">
-          <span class="card-tag">Visual memory</span>
-          <h3 class="card-title">Memory Match</h3>
-          <p class="card-desc">
-            Flip cards over to find every matching pair. No time limit!
-          </p>
-          <span class="card-cta">Play now <span aria-hidden="true">→</span></span>
-        </a>
-
-        <a href="face-recall.html" class="game-card" role="listitem"
-           aria-label="Face Recall — study a person's name and face, then recall it. Real-world memory game.">
-          <span class="card-tag">Real-world names</span>
-          <h3 class="card-title">Face Recall</h3>
-          <p class="card-desc">
-            Build your real world face-name recall by matching names to faces, jobs, and fun facts!
-          </p>
-          <span class="card-cta">Play now <span aria-hidden="true">→</span></span>
-        </a>
-
-        <a href="vocab-practice.html" class="game-card" role="listitem"
-           aria-label="Vocab Practice — match words to their definitions. Language learning game.">
-          <span class="card-tag">Language &amp; learning</span>
-          <h3 class="card-title">Vocab Practice</h3>
-          <p class="card-desc">
-            Practice vocabulary by matching words to their definitions.
-          </p>
-          <span class="card-cta">Play now <span aria-hidden="true">→</span></span>
-        </a>
-
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <h1 class="hero-title">Grow your memory.</h1>
+        <p class="hero-desc">Simple, everyday exercises to keep your mind sharp and engaged.</p>
       </div>
     </div>
   </section>
 
-  <!-- ══ FOOTER ══ -->
+  <section id="games" class="games-bg section-pad" aria-labelledby="games-heading">
+    <div class="section-center">
+      <h2 class="section-title" id="games-heading">Pick your exercise</h2>
+      <p class="section-sub">Three games, each working a different part of your memory. All free, no timers — take as long as you need.</p>
+
+      <div class="games-grid" role="list">
+        <a href="memory-match.html" class="game-card" role="listitem">
+          <h3 class="card-title">Memory Match</h3>
+          <p class="card-desc">Flip cards over to find every matching pair. No time limit!</p>
+          <span class="card-cta">Play now <span aria-hidden="true">→</span></span>
+        </a>
+
+        <a href="face-recall.html" class="game-card" role="listitem">
+          <h3 class="card-title">Face Recall</h3>
+          <p class="card-desc">Build your real world face-name recall by matching names to faces, jobs, and fun facts!</p>
+          <span class="card-cta">Play now <span aria-hidden="true">→</span></span>
+        </a>
+
+        <a href="vocab-practice.html" class="game-card" role="listitem">
+          <h3 class="card-title">Vocab Practice</h3>
+          <p class="card-desc">Practice vocabulary by matching words to their definitions.</p>
+          <span class="card-cta">Play now <span aria-hidden="true">→</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <footer role="contentinfo">
     <div class="footer-inner">
       <span class="footer-logo">🌱 MindBloom</span>
     </div>
   </footer>
+
+  <script>
+    function checkAuth() {
+      const user = localStorage.getItem('mb-user');
+      if (!user) {
+        document.getElementById('login-modal').style.display = 'flex';
+        document.getElementById('user-nav').style.display = 'none';
+      } else {
+        document.getElementById('login-modal').style.display = 'none';
+        document.getElementById('display-name').textContent = user;
+        document.getElementById('user-nav').style.display = 'flex';
+      }
+    }
+
+    function login() {
+      const name = document.getElementById('username-input').value.trim();
+      if (name) {
+        localStorage.setItem('mb-user', name);
+        checkAuth();
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('mb-user');
+      checkAuth();
+    }
+
+    document.addEventListener('DOMContentLoaded', checkAuth);
+  </script>
 
   <script src="accessibility.js"></script>
 

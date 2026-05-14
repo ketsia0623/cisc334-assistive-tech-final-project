@@ -23,33 +23,47 @@
     h1 { font-family: 'Fredoka One', cursive; color: #173404; margin-bottom: 0.5rem; text-align: center; }
     .subtitle { text-align: center; margin-bottom: 2rem; color: #4a5568; }
 
+    /* TABS */
+    .tab-container {
+      display: flex; justify-content: center; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: white; border: 2px solid #97C459; color: #27500A;
+      font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 1rem;
+      padding: 10px 20px; border-radius: 20px; cursor: pointer;
+    }
+    .tab-btn:hover { background: #C0DD97; }
+    .tab-btn.active { background: #27500A; color: #C0DD97; border-color: #27500A; }
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* GRID & CARDS */
     .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1.5rem; margin-bottom: 2rem;
     }
     .card {
       background: white; border: 2px solid #97C459;
-      padding: 1rem; text-align: center;
+      padding: 1rem; text-align: center; border-radius: 12px;
     }
     .card img {
       width: 120px; height: 120px; border-radius: 50%;
-      object-fit: cover; margin-bottom: 1rem;
-      border: 3px solid #639922;
+      object-fit: cover; margin-bottom: 1rem; border: 3px solid #639922;
     }
-    .card h3 { color: #173404; margin-bottom: 0.2rem; }
+    .card h3 { color: #173404; margin-bottom: 0.2rem; font-family: 'Fredoka One', cursive; }
     .card .role { font-weight: bold; font-size: 0.9rem; color: #3B6D11; }
     .card .fact { font-size: 0.85rem; color: #4a5568; margin-top: 0.5rem; }
     
     .btn {
       display: block; width: 200px; margin: 0 auto;
-      background: #3B6D11; color: white; border: none;
+      background: #3B6D11; color: white; border: none; border-radius: 12px;
       padding: 12px; font-size: 1rem; font-weight: bold; cursor: pointer;
     }
     .btn:hover { background: #173404; }
 
     select {
-      width: 100%; padding: 8px; margin-top: 1rem;
+      width: 100%; padding: 8px; margin-top: 1rem; border-radius: 6px;
       border: 1px solid #3B6D11; font-family: 'Nunito', sans-serif;
     }
     .result-msg { margin-top: 0.5rem; font-weight: bold; font-size: 0.9rem; }
@@ -57,6 +71,18 @@
     .incorrect { color: #D85A30; }
 
     #quiz-section, #results-section { display: none; }
+
+    /* TIPS SECTION */
+    .tips-container {
+      background: white; border: 2px solid #97C459; border-radius: 16px;
+      padding: 2rem; max-width: 700px; margin: 0 auto; color: #1a1a1a;
+    }
+    .tips-container h2 { font-family: 'Fredoka One', cursive; color: #173404; margin-bottom: 1rem; }
+    .tips-container h3 { color: #27500A; margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1.1rem; }
+    .tips-container ul { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+    .tips-container li { margin-bottom: 0.5rem; }
+    .tips-container strong { color: #3B6D11; }
+    .example-list li { margin-bottom: 1rem; background: #EAF3DE; padding: 10px; border-radius: 8px; border-left: 4px solid #97C459; list-style-type: none; margin-left: 0; }
   </style>
 </head>
 <body>
@@ -68,31 +94,77 @@
 
   <main>
     <h1>Face Recall</h1>
-    <p class="subtitle" id="page-desc">Study the faces, names, and facts below. Take your time!</p>
+    <p class="subtitle" id="page-desc">Practice remembering names and faces.</p>
 
-    <div id="study-section">
-      <div class="grid" id="study-grid"></div>
-      <button class="btn" onclick="startQuiz()">I'm Ready - Start Quiz</button>
+    <div class="tab-container">
+      <button class="tab-btn active" onclick="switchTab('tab-practice', this)">Practice Quiz</button>
+      <button class="tab-btn" onclick="switchTab('tab-tips', this)">Tips & Tricks</button>
     </div>
 
-    <div id="quiz-section">
-      <div class="grid" id="quiz-grid"></div>
-      <button class="btn" onclick="submitQuiz()" id="submit-btn">Submit Answers</button>
+    <div id="tab-practice" class="tab-content active">
+      <div id="study-section">
+        <p style="text-align: center; margin-bottom: 1.5rem; font-weight: bold;">Study the faces, names, and facts below. Take your time!</p>
+        <div class="grid" id="study-grid"></div>
+        <button class="btn" onclick="startQuiz()">I'm Ready - Start Quiz</button>
+      </div>
+
+      <div id="quiz-section">
+        <p style="text-align: center; margin-bottom: 1.5rem; font-weight: bold;">Select the correct name for each person.</p>
+        <div class="grid" id="quiz-grid"></div>
+        <button class="btn" onclick="submitQuiz()" id="submit-btn">Submit Answers</button>
+      </div>
+
+      <div id="results-section" style="text-align: center; margin-top: 2rem;">
+        <h2 id="final-score" style="font-family: 'Fredoka One', cursive; color: #173404;"></h2>
+        <button class="btn" onclick="location.reload()" style="margin-top: 1rem;">Practice Again</button>
+      </div>
     </div>
 
-    <div id="results-section" style="text-align: center; margin-top: 2rem;">
-      <h2 id="final-score"></h2>
-      <button class="btn" onclick="location.reload()" style="margin-top: 1rem;">Try Again</button>
+    <div id="tab-tips" class="tab-content">
+      <div class="tips-container">
+        
+        <h2>Meet & Repeat</h2>
+        <ul>
+          <li><strong>Hear it:</strong> Make sure you clearly hear the name. If not, ask them to repeat it.</li>
+          <li><strong>Say it:</strong> Use their name immediately in conversation. "It's nice to meet you, Sarah."</li>
+          <li><strong>Spell it:</strong> If it's a unique name, ask how it's spelled to create a mental text image in your mind.</li>
+        </ul>
+
+        <h2 style="margin-top: 2rem;">The Association Technique</h2>
+        <ul>
+          <li><strong>Features:</strong> Pick a distinct facial feature to help memorize the person.</li>
+          <li><strong>Link the name:</strong> Link their name to something about their appearance or job. Make it as silly as possible so it's easier to remember.</li>
+        </ul>
+
+        <h3>Examples using our Practice Faces:</h3>
+        <ul class="example-list">
+          <li><strong>Sofia Grant (Doctor):</strong> Imagine her sitting on a <em>Sofa</em> (Sofia) while <em>Granting</em> (Grant) health wishes to her patients.</li>
+          <li><strong>Carlos Mendez (Park Ranger):</strong> Picture him driving a <em>Car</em> (Carlos) through the forest, stopping to <em>Mend</em> (Mendez) broken tree branches.</li>
+          <li><strong>Xiao Zhan (Actor):</strong> Think about some <em>Xiaolongbao</em> (Xiao) for his last name. Ooh you want some soup dumplings so bad rn.</li>
+        </ul>
+
+      </div>
     </div>
+
   </main>
 
   <script>
+    // --- TAB LOGIC ---
+    function switchTab(tabId, btnElement) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      
+      document.getElementById(tabId).classList.add('active');
+      btnElement.classList.add('active');
+    }
+
+    // --- GAME LOGIC ---
     const PEOPLE = [
       { name: 'John Smith',    role: 'Community Gardener', img: 'https://www.shutterstock.com/image-photo/cheerful-handsome-young-african-american-600nw-2566358183.jpg',  fact: 'Grows herbs and vegetables' },
-      { name: 'Xiao Zhan',  role: 'Actor',     img: 'https://i.scdn.co/image/ab6761610000e5eb44aeecc6eb7289663d46e21f', fact: 'Loves photography' },
+      { name: 'Xiao Zhan',     role: 'Actor',              img: 'https://i.scdn.co/image/ab6761610000e5eb44aeecc6eb7289663d46e21f', fact: 'Loves photography' },
       { name: 'Sofia Grant',   role: 'Local Doctor',       img: 'https://t4.ftcdn.net/jpg/03/83/25/83/360_F_383258331_D8imaEMl8Q3lf7EKU2Pi78Cn0R7KkW9o.jpg',  fact: 'Family medicine for 5 years' },
-      { name: 'James Smith',    role: 'Library Volunteer',  img: 'https://preview.redd.it/im-looking-for-more-stock-photos-of-this-guy-with-different-v0-cjiwwbj1eu9f1.jpeg?auto=webp&s=93e92b6c2d805a45d93a7bc994273864790b2923', fact: 'Reads to children on Saturdays' },
-      { name: 'Sonia Matthews',   role: 'Neighborhood Chef',  img: 'https://t4.ftcdn.net/jpg/04/80/05/77/360_F_480057743_J7wTBWRW3vABPnqEv2IwSVVXjj50xevN.jpg', fact: 'Award-winning carrot cake' },
+      { name: 'James Smith',   role: 'Library Volunteer',  img: 'https://preview.redd.it/im-looking-for-more-stock-photos-of-this-guy-with-different-v0-cjiwwbj1eu9f1.jpeg?auto=webp&s=93e92b6c2d805a45d93a7bc994273864790b2923', fact: 'Reads to children on Saturdays' },
+      { name: 'Sonia Matthews',role: 'Neighborhood Chef',  img: 'https://t4.ftcdn.net/jpg/04/80/05/77/360_F_480057743_J7wTBWRW3vABPnqEv2IwSVVXjj50xevN.jpg', fact: 'Award-winning carrot cake' },
       { name: 'Carlos Mendez', role: 'Park Ranger',        img: 'https://t3.ftcdn.net/jpg/06/20/79/64/360_F_620796488_9b3fBDnhkqYmaJhCJZOu1h9QvRRoxfJM.jpg', fact: 'Protects the nature reserve' }
     ];
 
@@ -113,7 +185,6 @@
     function startQuiz() {
       document.getElementById('study-section').style.display = 'none';
       document.getElementById('quiz-section').style.display = 'block';
-      document.getElementById('page-desc').innerText = 'Select the correct name for each person.';
 
       const grid = document.getElementById('quiz-grid');
       const shuffledPeople = [...PEOPLE].sort(() => Math.random() - 0.5);
@@ -138,6 +209,8 @@
     }
 
     function submitQuiz() {
+      localStorage.setItem('mb-progress', parseInt(localStorage.getItem('mb-progress') || '0') + 1);
+
       document.getElementById('submit-btn').style.display = 'none';
       let correctCount = 0;
 
@@ -161,7 +234,7 @@
 
     initStudy();
   </script>
+  
   <script src="accessibility.js"></script>
-
 </body>
 </html>
